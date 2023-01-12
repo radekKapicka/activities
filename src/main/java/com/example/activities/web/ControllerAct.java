@@ -1,21 +1,22 @@
 package com.example.activities.web;
 
-import com.example.activities.model.Board;
+import com.example.activities.model.Activity;
 import com.example.activities.model.User;
+import com.example.activities.repositories.ActivityRepository;
 import com.example.activities.repositories.UserRepository;
-import com.example.activities.services.BoardService;
+import com.example.activities.services.ActivityService;
 import com.example.activities.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -24,27 +25,28 @@ public class ControllerAct {
     private PasswordEncoder passwordEncoder;
 
     private final UserService userService;
-    private final BoardService boardService;
-    private Board newBoard = new Board();
+
+    private final ActivityService activityService;
+
+    User userAct = new User();
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ActivityRepository activityRepository;
 
-    public ControllerAct(UserService userService, BoardService boardService){
+    public ControllerAct(UserService userService, ActivityService activityService){
         this.userService = userService;
-        this.boardService = boardService;
+        this.activityService = activityService;
     }
-
     @GetMapping("registration")
     //@ResponseBody
     public String registration(Model m){
-        m.addAttribute("newUser", new User("","", newBoard, "user"));
-        m.addAttribute(newBoard);
+        m.addAttribute("newUser", new User("","", "user"));
         return "login-screen";
     }
 
     @PostMapping("registration")
-    public String registrationPost(Model m, @ModelAttribute User u, @ModelAttribute Board b){
-        u.setBoard(b);
+    public String registrationPost(Model m, @ModelAttribute User u){
         u.setPassword(passwordEncoder.encode(u.getPassword()));
         u.setRole("user");
         userService.addUser(u);
@@ -56,11 +58,56 @@ public class ControllerAct {
             return "login";
     }
 
-    @GetMapping("board")
+    @GetMapping("user-board")
     public String board(Model m){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         m.addAttribute("user",authentication.getName());
-        return "test";
+
+        User pomUser = userRepository.findByUsername(authentication.getName());
+
+        List<Activity> activitiesAll = activityRepository.findAll();
+        List<Activity> activitiesNew = new ArrayList<>();
+        List<Activity> activitiesToBeImp = new ArrayList<>();
+        List<Activity> activitiesDoing = new ArrayList<>();
+        List<Activity> activitiesDone = new ArrayList<>();
+
+        for (int i = 0; i< activitiesAll.size();i++){
+            if(activitiesAll.get(i).getUser().getId() == pomUser.getId() && activitiesAll.get(i).getState().equals("new")){
+                activitiesNew.add(activitiesAll.get(i));
+            }else
+            if(activitiesAll.get(i).getUser().getId() == pomUser.getId() && activitiesAll.get(i).getState().equals("toBeImp")){
+                activitiesToBeImp.add(activitiesAll.get(i));
+            }else
+            if(activitiesAll.get(i).getUser().getId() == pomUser.getId() && activitiesAll.get(i).getState().equals("doing")) {
+                activitiesDoing.add(activitiesAll.get(i));
+            }else
+            if(activitiesAll.get(i).getUser().getId() == pomUser.getId() && activitiesAll.get(i).getState().equals("done")) {
+                activitiesDone.add(activitiesAll.get(i));
+            }else {i++;}
+        }
+
+        m.addAttribute("activitiesNew",activitiesNew);
+        m.addAttribute("activitiesToBeImp",activitiesToBeImp);
+        m.addAttribute("activitiesDoing",activitiesDoing);
+        m.addAttribute("activitiesDone",activitiesDone);
+        return "user-board";
+    }
+
+    @GetMapping("activity")
+    public String activity(Model m){
+        List<User> listUser = userRepository.findAll();
+        m.addAttribute("usersFind", listUser);
+        m.addAttribute("newActivity", new Activity("", 0f, new Date(2023-01-11),
+                new Date(2023-01-11),0f,"","", new User(),0));
+        return "activity";
+    }
+
+    @PostMapping("activity")
+    public String activityPost(Model m,  @ModelAttribute Activity a){
+
+        a.setState("new");
+        activityService.addActivity(a);
+        return "redirect:/user-board";
     }
 
 }

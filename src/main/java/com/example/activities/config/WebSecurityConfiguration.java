@@ -43,8 +43,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
         http.cors().and().csrf().disable().authorizeRequests().antMatchers(WHITE_LIST_URLS).permitAll();
         http
                 .authorizeRequests()
-                .antMatchers("/board").hasRole("user")
-                .antMatchers("/board").authenticated()
+                .antMatchers("/user-board").hasRole("user")
+                .antMatchers("/user-board").authenticated()
+                .antMatchers("/activity").hasRole("user")
+                .antMatchers("/activity").authenticated()
                 .and()
                 .formLogin()
                 .loginProcessingUrl("/signin")

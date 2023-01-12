@@ -16,6 +16,11 @@ public class User {
     private String username;
     private String password;
 
+    @OneToMany(mappedBy = "user",
+            orphanRemoval = true,
+            cascade = CascadeType.ALL)
+    private List<Activity> activities;
+
     private String role;
 
     public String getRole() {
@@ -26,29 +31,39 @@ public class User {
         this.role = role;
     }
 
-    @OneToMany(mappedBy="user")
-    private List<Activity> activities;
 
-    public User(String username, String password, List<Activity> activities, Board board, String user) {
+    public User(String username, String password, String user) {
         this.username = username;
         this.password = password;
-        this.activities = activities;
-        this.board = board;
         this.role = user;
     }
 
-    public User(String username, String password, Board board, String user) {
+    public User(int id, String username, String password, String role) {
+        this.id = id;
         this.username = username;
         this.password = password;
-        this.board = board;
-        this.role = user;
+        this.role = role;
     }
 
     public User() {
     }
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private Board board;
+    public List<Activity> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(List<Activity> activities) {
+        this.activities = activities;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
 
     public String getUsername() {
         return username;
@@ -66,21 +81,6 @@ public class User {
         this.password = password;
     }
 
-    public List<Activity> getActivities() {
-        return activities;
-    }
-
-    public void setActivities(List<Activity> activities) {
-        this.activities = activities;
-    }
-
-    public Board getBoard() {
-        return board;
-    }
-
-    public void setBoard(Board board) {
-        this.board = board;
-    }
 
     @Override
     public String toString() {
@@ -89,8 +89,6 @@ public class User {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", role='" + role + '\'' +
-                ", activities=" + activities +
-                ", board=" + board +
                 '}';
     }
 }
