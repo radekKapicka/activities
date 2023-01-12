@@ -50,7 +50,7 @@ public class ControllerAct {
         u.setPassword(passwordEncoder.encode(u.getPassword()));
         u.setRole("user");
         userService.addUser(u);
-        return "redirect:/registration";
+        return "redirect:/login";
     }
 
     @GetMapping("login")
@@ -90,6 +90,11 @@ public class ControllerAct {
         m.addAttribute("activitiesToBeImp",activitiesToBeImp);
         m.addAttribute("activitiesDoing",activitiesDoing);
         m.addAttribute("activitiesDone",activitiesDone);
+        m.addAttribute("activitiesDone",activitiesDone);
+        m.addAttribute("numOfActivitiesNew",activitiesNew.size());
+        m.addAttribute("numOfActivitiesTBI",activitiesToBeImp.size());
+        m.addAttribute("numOfActivitiesWO",activitiesDoing.size());
+        m.addAttribute("numOfActivitiesDone",activitiesDone.size());
         return "user-board";
     }
 

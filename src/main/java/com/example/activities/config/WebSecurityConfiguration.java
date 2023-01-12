@@ -47,6 +47,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .antMatchers("/user-board").authenticated()
                 .antMatchers("/activity").hasRole("user")
                 .antMatchers("/activity").authenticated()
+                .antMatchers("/layout").hasRole("user")
+                .antMatchers("/layout").authenticated()
+                .antMatchers("/css/**").permitAll()
                 .and()
                 .formLogin()
                 .loginProcessingUrl("/signin")
@@ -54,7 +57,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .usernameParameter("txtUsername")
                 .passwordParameter("txtPassword")
                 .and()
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/registration");
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/user-board");
                 //.and()
                 //.rememberMe().tokenValiditySeconds(2592000).key("mySecret!").rememberMeParameter("checkRememberMe");
     }

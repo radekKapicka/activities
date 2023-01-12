@@ -1,0 +1,96 @@
+.navbar{
+    background-color:#323232 !important;
+    color: #fdfdfd;
+}
+
+li span{
+    color: #fdfdfd;
+    text-decoration: underline;
+}
+
+li span:hover{
+    color: #AAAAAA;
+    text-decoration: none;
+}
+
+.fa-logout a{
+    color: #fdfdfd;
+}
+
+.fa-logout a:hover{
+    color: #AAAAAA;
+    text-decoration: none;
+}
+
+.fa-username{
+margin-right: 30px;
+}
+
+.fa-username span{
+    font-weight: bold;
+}
+.navbar-expand-lg{
+    padding: 0 50px;
+    margin-bottom: 30px;
+}
+
+.container{
+    max-width: 100% !important;
+}
+
+.heading-row{
+    background-color:#323232;
+    color: #fdfdfd;
+    padding: 15px 20px;
+}
+
+.hr-first{
+    background-color: #FF9933;
+}
+.hr-second{
+    background-color: #138808;
+}
+.hr-third{
+    background-color: #000080;
+}
+
+
+.heading-row h2{
+    font-size: 1.3rem !important;
+    margin: 0 !important;
+}
+
+.activity-card{
+    background-color: #DDDDDD;
+    margin-top: 10px;
+    border:1px solid #888888;
+    padding: 10px 20px;
+}
+
+h3{
+    font-size: 1.3rem !important;
+    margin: 0 !important;
+}
+
+.date-inline{
+    margin-bottom: 15px;
+}
+.date-inline b{
+    margin-right: 15px;
+}
+
+.date-inline b,.date-inline p{
+    display: inline;
+}
+
+.priority-inline{
+    margin-bottom: 15px;
+}
+
+.priority-inline p{
+    display: inline;
+}
+
+.heading-row{
+    margin: 0 0 !important;
+}
