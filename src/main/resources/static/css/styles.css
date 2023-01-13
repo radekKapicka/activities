@@ -94,3 +94,49 @@ h3{
 .heading-row{
     margin: 0 0 !important;
 }
+
+.addActivityForm{
+    margin:auto;
+}
+
+.addActivityForm form input, .addActivityForm form div div select{
+    margin-bottom: 10px;
+}
+
+.btn-dark{
+    margin-top: 10px;
+}
+
+.card{
+    margin:auto;
+}
+
+.card{
+    margin-top: 180px !important;
+    padding: 20px !important;
+}
+
+.card-block form fieldset div input{
+    margin-bottom: 10px;
+}
+
+.card-block form fieldset div div a{
+    margin-top: 0 !important;
+}
+
+.buttons-bottom{
+    margin-top: 10px !important;
+}
+
+.row div form div div a{
+    margin-top: 0 !important;
+}
+
+.row div form input{
+    margin-bottom: 10px !important;
+}
+
+.register-row{
+    margin:50px auto !important;
+}
+

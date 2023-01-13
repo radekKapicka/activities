@@ -100,6 +100,8 @@ public class ControllerAct {
 
     @GetMapping("activity")
     public String activity(Model m){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        m.addAttribute("user",authentication.getName());
         List<User> listUser = userRepository.findAll();
         m.addAttribute("usersFind", listUser);
         m.addAttribute("newActivity", new Activity("", 0f, new Date(2023-01-11),
