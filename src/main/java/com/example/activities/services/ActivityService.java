@@ -11,4 +11,8 @@ public interface ActivityService {
 
     List<Activity> getAll();
 
+    Activity findActivity(int id);
+
+    Activity updateActivity (Activity activity);
+
 }

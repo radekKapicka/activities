@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,16 +75,13 @@ public class ControllerAct {
         for (int i = 0; i< activitiesAll.size();i++){
             if(activitiesAll.get(i).getUser().getId() == pomUser.getId() && activitiesAll.get(i).getState().equals("new")){
                 activitiesNew.add(activitiesAll.get(i));
-            }else
-            if(activitiesAll.get(i).getUser().getId() == pomUser.getId() && activitiesAll.get(i).getState().equals("toBeImp")){
+            }else if(activitiesAll.get(i).getUser().getId() == pomUser.getId() && activitiesAll.get(i).getState().equals("toBeImp")){
                 activitiesToBeImp.add(activitiesAll.get(i));
-            }else
-            if(activitiesAll.get(i).getUser().getId() == pomUser.getId() && activitiesAll.get(i).getState().equals("doing")) {
+            }else if(activitiesAll.get(i).getUser().getId() == pomUser.getId() && activitiesAll.get(i).getState().equals("doing")) {
                 activitiesDoing.add(activitiesAll.get(i));
-            }else
-            if(activitiesAll.get(i).getUser().getId() == pomUser.getId() && activitiesAll.get(i).getState().equals("done")) {
+            }else if(activitiesAll.get(i).getUser().getId() == pomUser.getId() && activitiesAll.get(i).getState().equals("done")) {
                 activitiesDone.add(activitiesAll.get(i));
-            }else {i++;}
+            }
         }
 
         m.addAttribute("activitiesNew",activitiesNew);
@@ -114,6 +112,37 @@ public class ControllerAct {
 
         a.setState("new");
         activityService.addActivity(a);
+        return "redirect:/user-board";
+    }
+
+    @GetMapping("activity/{id}")
+    public String updateAct(@PathVariable int id, Model m){
+        Activity findActivity = activityService.findActivity(id);
+        m.addAttribute("newActivity", new Activity(
+                findActivity.getId(),
+                findActivity.getName(),
+                findActivity.getTime(),
+                findActivity.getDateFrom(),
+                findActivity.getDateTo(),
+                findActivity.getPriority(),
+                findActivity.getState(),
+                findActivity.getTimeWorked(),
+                findActivity.getDescription(),
+                findActivity.getUser()));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        m.addAttribute("user",authentication.getName());
+        List<User> listUser = userRepository.findAll();
+        m.addAttribute("usersFind", listUser);
+
+
+        return "activity-edit";
+    }
+
+    @PostMapping("activity/{id}")
+    public String updateActPost(@PathVariable int id, Model m, @ModelAttribute Activity a){
+
+
+        activityService.updateActivity(a);
         return "redirect:/user-board";
     }
 

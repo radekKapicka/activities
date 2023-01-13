@@ -37,6 +37,19 @@ public class Activity {
         this.timeWorked = timeWorked;
     }
 
+    public Activity(int id, String name, float time, Date dateFrom, Date dateTo, float priority, String state, float timeWorked, String description, User user) {
+        this.id = id;
+        this.name = name;
+        this.time = time;
+        this.dateFrom = dateFrom;
+        this.dateTo = dateTo;
+        this.priority = priority;
+        this.state = state;
+        this.timeWorked = timeWorked;
+        this.description = description;
+        this.user = user;
+    }
+
     public Activity() {
     }
 

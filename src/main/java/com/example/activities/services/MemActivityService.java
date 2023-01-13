@@ -30,4 +30,14 @@ public class MemActivityService implements ActivityService{
     public List<Activity> getAll() {
         return Collections.unmodifiableList(activities);
     }
+
+    @Override
+    public Activity findActivity(int id) {
+        return actrepo.getOne(id);
+    }
+
+    @Override
+    public Activity updateActivity(Activity activity) {
+        return actrepo.save(activity);
+    }
 }

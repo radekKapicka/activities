@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout (~{::body},'user-board')}">
+<head>
+    <meta charset="UTF-8">
+    <title>Add activity</title>
+</head>
+<body>
+<div class="row">
+  <div class="col-sm-6 addActivityForm">
+    <h1>Add new activity</h1>
+    <form method="post" th:object="${newActivity}">
+      <div class="row">
+        <div class="col-sm-9">
+          <input th:replace="~{fragments/inputText :: input ('Name', 'name', 'text')}" th:field="*{name}">
+        </div>
+        <div class="col-sm-3">
+          <input th:replace="~{fragments/inputText :: input ('Priority', 'priority', 'readOnlyText')}" th:field="*{priority}">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <input th:replace="~{fragments/inputText :: input ('Worked', 'timeWorked', 'readOnlyText')}" th:field="*{timeWorked}">
+        </div>
+        <div class="col-sm-6">
+          <input th:replace="~{fragments/inputText :: input ('Time', 'time', 'readOnlyText')}" th:field="*{time}">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <input th:replace="~{fragments/inputText :: input ('From', 'dateFrom', 'date')}" th:field="*{dateFrom}">
+        </div>
+        <div class="col-sm-6">
+          <input th:replace="~{fragments/inputText :: input ('Deadline', 'dateTo', 'date')}" th:field="*{dateTo}">
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-sm-6">
+          <label>State</label></br>
+          <select class="form-select" th:field="*{state}">
+            <option th:value="new" th:text="New"></option>
+            <option th:value="toBeImp" th:text="'To be implemented'"></option>
+            <option th:value="doing" th:text="Doing"></option>
+            <option th:value="done" th:text="Done"></option>
+          </select>
+        </div>
+      <div class="col-sm-6">
+        <label>User</label></br>
+        <select class="form-select" th:field="*{user}">
+          <option th:each="userNew: ${usersFind}" th:value="${userNew.id}" th:text="${userNew.username}"></option>
+        </select>
+      </div>
+      </div>
+      <input th:replace="~{fragments/inputText :: input ('Description', 'description', 'textArea')}" th:field="*{description}">
+      <div class="row">
+        <div class="col-sm-6">
+
+        </div>
+        <div class="col-sm-6">
+
+        </div>
+      </div>
+      <input class="btn btn-dark" type="submit" value="Submit">
+    </form>
+  </div>
+</div>
+</body>
+</html>

@@ -20,7 +20,7 @@
             </div>
             <div class="activity-card" th:each="activity: ${activitiesNew}">
                 <div class="row priority-inline">
-                    <div class="col-sm-7"><h3 th:text="${activity.name}"></h3></div>
+                    <div class="col-sm-7"><a th:href="@{/activity/{id}(id=${activity.id})}"><h3 th:text="${activity.name}"></h3></a></div>
                     <div class="col-sm-5">Priority: <p th:text="${activity.priority}"></p></div>
                 </div>
                 <div class="row date-inline">
@@ -40,7 +40,7 @@
             </div>
             <div class="activity-card" th:each="activity: ${activitiesToBeImp}">
                 <div class="row">
-                    <div class="col-sm-9"><h3 th:text="${activity.name}"></h3></div>
+                    <div class="col-sm-9"><a th:href="@{/activity/{id}(id=${activity.id})}"><h3 th:text="${activity.name}"></h3></a></h3></div>
                     <div class="col-sm-3"><p th:text="${activity.priority}"></p></div>
                 </div>
                 <div class="row date-inline">
@@ -60,7 +60,7 @@
             </div>
             <div class="activity-card" th:each="activity: ${activitiesDoing}">
                 <div class="row">
-                    <div class="col-sm-9"><h3 th:text="${activity.name}"></h3></div>
+                    <div class="col-sm-9"><a th:href="@{/activity/{id}(id=${activity.id})}"><h3 th:text="${activity.name}"></h3></a></div>
                     <div class="col-sm-3"><p th:text="${activity.priority}"></p></div>
                 </div>
                 <div class="row date-inline">
@@ -80,7 +80,7 @@
             </div>
             <div class="activity-card" th:each="activity: ${activitiesDone}">
                 <div class="row">
-                    <div class="col-sm-9"><h3 th:text="${activity.name}"></h3></div>
+                    <div class="col-sm-9"><a th:href="@{/activity/{id}(id=${activity.id})}"><h3 th:text="${activity.name}"></h3></a></div>
                     <div class="col-sm-3"><p th:text="${activity.priority}"></p></div>
                 </div>
                 <div class="row date-inline">
