@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout (~{::body},'user-board')}">
+<head>
+  <meta charset="UTF-8">
+  <title>Add activity</title>
+</head>
+<body>
+<div class="row">
+  <div class="col-sm-6 addActivityForm">
+    <h1>Add report</h1>
+    <div class="row">
+      <form method="post" th:object="${newReport}">
+        <div class="row">
+          <div class="col-sm-6">
+            <input th:replace="~{fragments/inputText :: input ('Time from', 'timeFrom', 'date')}" th:field="*{timeFrom}">
+          </div>
+          <div class="col-sm-6">
+            <input th:replace="~{fragments/inputText :: input ('Time to', 'timeTo', 'date')}" th:field="*{timeTo}">
+          </div>
+        </div>
+        <input class="btn btn-dark" type="submit" value="Submit">
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>

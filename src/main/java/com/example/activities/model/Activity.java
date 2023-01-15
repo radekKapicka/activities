@@ -25,6 +25,11 @@ public class Activity {
     @ManyToOne
     private User user;
 
+    @OneToMany(mappedBy = "activity",
+            cascade = CascadeType.ALL)
+    private List<WorkRegister> workRegisters;
+
+
     public Activity(String name, float time, Date dateFrom, Date dateTo, float priority, String state, String description, User user, int timeWorked) {
         this.name = name;
         this.time = time;
@@ -51,6 +56,28 @@ public class Activity {
     }
 
     public Activity() {
+    }
+
+    public Activity(int id, String name, float time, Date dateFrom, Date dateTo, float priority, String state, float timeWorked, String description, User user, List<WorkRegister> workRegisters) {
+        this.id = id;
+        this.name = name;
+        this.time = time;
+        this.dateFrom = dateFrom;
+        this.dateTo = dateTo;
+        this.priority = priority;
+        this.state = state;
+        this.timeWorked = timeWorked;
+        this.description = description;
+        this.user = user;
+        this.workRegisters = workRegisters;
+    }
+
+    public List<WorkRegister> getWorkRegisters() {
+        return workRegisters;
+    }
+
+    public void setWorkRegisters(List<WorkRegister> workRegisters) {
+        this.workRegisters = workRegisters;
     }
 
     public float getTimeWorked() {

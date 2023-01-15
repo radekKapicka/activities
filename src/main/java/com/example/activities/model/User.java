@@ -17,9 +17,13 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user",
-            orphanRemoval = true,
             cascade = CascadeType.ALL)
     private List<Activity> activities;
+
+    @OneToMany(mappedBy = "user",
+            orphanRemoval = true,
+            cascade = CascadeType.ALL)
+    private List<WorkRegister> workRegisters;
 
     private String role;
 
@@ -31,6 +35,22 @@ public class User {
         this.role = role;
     }
 
+    public User(int id, String username, String password, List<Activity> activities, List<WorkRegister> workRegisters, String role) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.activities = activities;
+        this.workRegisters = workRegisters;
+        this.role = role;
+    }
+
+    public List<WorkRegister> getWorkRegisters() {
+        return workRegisters;
+    }
+
+    public void setWorkRegisters(List<WorkRegister> workRegisters) {
+        this.workRegisters = workRegisters;
+    }
 
     public User(String username, String password, String user) {
         this.username = username;

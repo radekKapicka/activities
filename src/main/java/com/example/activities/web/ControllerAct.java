@@ -2,10 +2,13 @@ package com.example.activities.web;
 
 import com.example.activities.model.Activity;
 import com.example.activities.model.User;
+import com.example.activities.model.WorkRegister;
 import com.example.activities.repositories.ActivityRepository;
 import com.example.activities.repositories.UserRepository;
+import com.example.activities.repositories.WorkRegisterRepository;
 import com.example.activities.services.ActivityService;
 import com.example.activities.services.UserService;
+import com.example.activities.services.WorkRegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,15 +32,21 @@ public class ControllerAct {
 
     private final ActivityService activityService;
 
+    private final WorkRegisterService workRegisterService;
+
     User userAct = new User();
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private ActivityRepository activityRepository;
 
-    public ControllerAct(UserService userService, ActivityService activityService){
+    @Autowired
+    private WorkRegisterRepository workRegisterRepository;
+
+    public ControllerAct(UserService userService, ActivityService activityService, WorkRegisterService workRegisterService){
         this.userService = userService;
         this.activityService = activityService;
+        this.workRegisterService = workRegisterService;
     }
     @GetMapping("registration")
     //@ResponseBody
@@ -132,8 +141,8 @@ public class ControllerAct {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         m.addAttribute("user",authentication.getName());
         List<User> listUser = userRepository.findAll();
-        m.addAttribute("usersFind", listUser);
 
+        m.addAttribute("usersFind", listUser);
 
         return "activity-edit";
     }
@@ -141,8 +150,27 @@ public class ControllerAct {
     @PostMapping("activity/{id}")
     public String updateActPost(@PathVariable int id, Model m, @ModelAttribute Activity a){
 
-
         activityService.updateActivity(a);
+        return "redirect:/user-board";
+    }
+
+    @GetMapping("activity/{id}/addReport")
+    public String addReport(@PathVariable int id, Model m){
+
+        m.addAttribute("newReport", new WorkRegister(new User(),new Activity(),new Date(2023-01-11),new Date(2023-01-11)));
+
+        return "addReport";
+    }
+
+    @PostMapping("activity/{id}/addReport")
+    public String addReportPost(@PathVariable int id, Model m, @ModelAttribute WorkRegister w){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User pomUser = userRepository.findByUsername(authentication.getName());
+        Activity pomActivity = activityService.findActivity(id);
+
+        w.setUser(pomUser);
+        w.setActivity(pomActivity);
+        workRegisterService.addRegister(w);
         return "redirect:/user-board";
     }
 
