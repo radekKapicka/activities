@@ -16,7 +16,9 @@
     </div>
     <form method="post" th:object="${newActivity}">
       <div class="row">
-        <a th:href="@{/activity/{id}/addReport(id=${newActivity.getId()})}">test</a>
+        <div>
+          <a class="btn btn-dark" th:href="@{/activity/{id}/addReport(id=${newActivity.getId()})}">Add report for this activity</a>
+        </div>
       </div>
       <div class="row">
         <div class="col-sm-9">

@@ -11,7 +11,7 @@
                     <input th:case="'text'" class="form-control" type="text" th:field="*{__${name}__}" required/>
                     <input th:case="'readOnlyText'" class="form-control" type="text" th:field="*{__${name}__}" required readonly/>
                     <input th:case="'date'" class="form-control" type="date" th:field="*{__${name}__}" required/>
-                    <input th:case="'time'" class="form-control" type="time" th:field="*{__${name}__}"/>
+                    <input th:case="'datetime-local'" class="form-control" type="datetime-local" th:field="*{__${name}__}"/>
                     <input th:case="'password'" class="form-control" type="password" th:field="*{__${name}__}" required/>
                     <input th:case="'number'" step=".01" class="form-control" type="number" th:field="*{__${name}__}" required/>
                     <textarea th:case="'textArea'" class="form-control" type="textArea" th:field="*{__${name}__}" ></textarea>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout (~{::body},'user-board')}">
+<head>
+  <meta charset="UTF-8">
+  <title>Add activity</title>
+</head>
+<body>
+<div class="row">
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th scope="col">Activity Name</th>
+      <th scope="col">Start of work</th>
+      <th scope="col">End of work</th>
+      <th scope="col">Time</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="report: ${reports}">
+      <td><a th:href="@{/activity/{id}(id=${report.activity.getId()})}"><span th:text="${report.activity.name}"></span></a></td>
+      <td th:text="${report.timeFrom}">1</td>
+      <td th:text="${report.timeTo}">Mark</td>
+      <td th:text="${report.partOfTime}">@mdo</td>
+    </tr>
+    </tbody>
+  </table>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

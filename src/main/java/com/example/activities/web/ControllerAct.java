@@ -17,8 +17,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Array;
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -157,7 +159,11 @@ public class ControllerAct {
     @GetMapping("activity/{id}/addReport")
     public String addReport(@PathVariable int id, Model m){
 
-        m.addAttribute("newReport", new WorkRegister(new User(),new Activity(),new Date(2023-01-11),new Date(2023-01-11)));
+        Activity pom = activityService.findActivity(id);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        m.addAttribute("user",authentication.getName());
+
+        m.addAttribute("newReport", new WorkRegister(new User(),pom,LocalDateTime.of(1,1,1,1,1),LocalDateTime.of(1,1,1,1,1),0));
 
         return "addReport";
     }
@@ -168,10 +174,41 @@ public class ControllerAct {
         User pomUser = userRepository.findByUsername(authentication.getName());
         Activity pomActivity = activityService.findActivity(id);
 
+        float hourFrom = (w.getTimeFrom().getHour()  * 60) + w.getTimeFrom().getMinute();
+        float hourTo = (w.getTimeTo().getHour() * 60) + w.getTimeTo().getMinute();
+
+        float dif = (hourTo - hourFrom) / 60;
+
+
+        w.setPartOfTime(dif);
         w.setUser(pomUser);
         w.setActivity(pomActivity);
+        pomActivity.setTimeWorked(pomActivity.getTimeWorked() + dif);
+        activityService.updateActivity(pomActivity);
         workRegisterService.addRegister(w);
-        return "redirect:/user-board";
+        return "redirect:/activity/{id}";
+    }
+
+    @GetMapping("workReports")
+    public String showReports(Model m){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User pomUser = userRepository.findByUsername(authentication.getName());
+
+        List<WorkRegister> finalReg = new ArrayList<>();
+
+        List<WorkRegister> pomRegister = workRegisterRepository.findAll();
+        List<Float> pomTime = new ArrayList<>();
+
+        for(int i =0; i < pomRegister.size();i++){
+            if(pomRegister.get(i).getUser() == pomUser){
+                finalReg.add(pomRegister.get(i));
+
+            }
+        }
+
+        m.addAttribute("user",authentication.getName());
+        m.addAttribute("reports",finalReg);
+        return "workReports";
     }
 
 }

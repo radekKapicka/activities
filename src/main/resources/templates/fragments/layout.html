@@ -53,6 +53,10 @@ xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
           <span class="fa fa-activity" aria-hidden="true"></span>
           <span>Add activity</span>
         </li>
+        <li th:replace="~{::menuItem ('/workReports','workReports','Work reports','workReports','Work Reports')}">
+          <span class="fa fa-activity" aria-hidden="true"></span>
+          <span>Work reports</span>
+        </li>
       </ul>
       <div class="fa fa-username">
         Logged user:

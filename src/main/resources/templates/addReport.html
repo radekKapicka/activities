@@ -14,13 +14,20 @@
       <form method="post" th:object="${newReport}">
         <div class="row">
           <div class="col-sm-6">
-            <input th:replace="~{fragments/inputText :: input ('Time from', 'timeFrom', 'date')}" th:field="*{timeFrom}">
+            <input th:replace="~{fragments/inputText :: input ('Time from', 'timeFrom', 'datetime-local')}" th:field="*{timeFrom}">
           </div>
           <div class="col-sm-6">
-            <input th:replace="~{fragments/inputText :: input ('Time to', 'timeTo', 'date')}" th:field="*{timeTo}">
+            <input th:replace="~{fragments/inputText :: input ('Time to', 'timeTo', 'datetime-local')}" th:field="*{timeTo}">
           </div>
         </div>
-        <input class="btn btn-dark" type="submit" value="Submit">
+        <div class="row">
+          <div class="col-sm-3">
+            <input class="btn btn-success" type="submit" value="Submit">
+          </div>
+          <div class="col-sm-9">
+            <a th:href="@{/activity/{id}(id=${newReport.getActivity().getId()})}" class="btn btn-dark">Back to activity</a>
+          </div>
+        </div>
       </form>
     </div>
   </div>
