@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout (~{::body},'user-board')}">
+<head>
+    <meta charset="UTF-8">
+    <title>Add child activity</title>
+</head>
+<body>
+<div class="row">
+  <div class="col-sm-6 addActivityForm">
+    <h1>Add new activity</h1>
+    <form method="post" th:object="${newActivityChild}">
+      <input th:replace="~{fragments/inputText :: input ('Name', 'name', 'text')}" th:field="*{name}">
+      <input th:replace="~{fragments/inputText :: input ('Time', 'time', 'number')}" th:field="*{time}">
+      <input th:replace="~{fragments/inputText :: input ('Date from', 'dateFrom', 'date')}" th:field="*{dateFrom}">
+      <input th:replace="~{fragments/inputText :: input ('Date to', 'dateTo', 'date')}" th:field="*{dateTo}">
+      <div class="row">
+        <div class="col-sm-6">
+          <label>State</label></br>
+          <select class="form-select" th:field="*{priority}">
+            <option th:value="1.0f" th:text="low"></option>
+            <option th:value="2.0f" th:text="medium"></option>
+            <option th:value="3.0f" th:text="strong"></option>
+          </select>
+        </div>
+      <div class="col-sm-6">
+        <label>User</label></br>
+        <select class="form-select" th:field="*{user}">
+          <option th:each="userNew: ${usersFind}" th:value="${userNew.id}" th:text="${userNew.username}"></option>
+        </select>
+      </div>
+      </div>
+      <input th:replace="~{fragments/inputText :: input ('Description', 'description', 'textArea')}" th:field="*{description}">
+      <input class="btn btn-dark" type="submit" value="Submit">
+    </form>
+  </div>
+</div>
+</body>
+</html>

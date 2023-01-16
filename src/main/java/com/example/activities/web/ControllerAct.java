@@ -143,15 +143,27 @@ public class ControllerAct {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         m.addAttribute("user",authentication.getName());
         List<User> listUser = userRepository.findAll();
-
         m.addAttribute("usersFind", listUser);
+
+        List<Activity> activitiesPom = activityRepository.findAll();
+        List<Activity> childActivities = new ArrayList<>();
+
+        for (int i =0; i<activitiesPom.size();i++){
+            if(activitiesPom.get(i).getMotherActivity().getId() == id){
+                childActivities.add(activitiesPom.get(i));
+            }else{i++;}
+        }
+
+        m.addAttribute("childActivities", childActivities);
 
         return "activity-edit";
     }
 
     @PostMapping("activity/{id}")
     public String updateActPost(@PathVariable int id, Model m, @ModelAttribute Activity a){
-
+        Activity findActivity = activityService.findActivity(id);
+        a.setMotherActivity(findActivity.getMotherActivity());
+        System.out.println(a.getMotherActivity());
         activityService.updateActivity(a);
         return "redirect:/user-board";
     }
@@ -209,6 +221,30 @@ public class ControllerAct {
         m.addAttribute("user",authentication.getName());
         m.addAttribute("reports",finalReg);
         return "workReports";
+    }
+
+    @GetMapping("activity/{id_mother}/createChildActivity")
+    public String childActivity(Model m){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        m.addAttribute("user",authentication.getName());
+        List<User> listUser = userRepository.findAll();
+        m.addAttribute("usersFind", listUser);
+        m.addAttribute("newActivityChild", new Activity(0,"", 0f, new Date(2023-01-11),
+                new Date(2023-01-11),0f,"",0f, "",new User()));
+        return "createChildActivity";
+    }
+
+    @PostMapping("activity/{id_mother}/createChildActivity")
+    public String childActivityPost(Model m, @PathVariable int id_mother,  @ModelAttribute Activity a){
+        Activity activityPom = activityService.findActivity(id_mother);
+        System.out.println(a.getId());
+        System.out.println(activityPom.getId());
+        a.setMotherActivity(activityPom);
+        activityPom.getChildActivities().add(a);
+
+        a.setState("new");
+        activityService.addActivity(a);
+        return "redirect:/user-board";
     }
 
 }
