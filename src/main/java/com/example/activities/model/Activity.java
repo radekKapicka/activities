@@ -35,6 +35,10 @@ public class Activity {
 
     @OneToMany(mappedBy = "activity",
             cascade = CascadeType.ALL)
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "activity",
+            cascade = CascadeType.ALL)
     private List<WorkRegister> workRegisters;
 
     public Activity getMotherActivity() {
@@ -116,6 +120,31 @@ public class Activity {
         this.childActivities = childActivities;
         this.user = user;
         this.workRegisters = workRegisters;
+    }
+
+    public Activity(int id, String name, float time, Date dateFrom, Date dateTo, float priority, String state, float timeWorked, String description, Activity motherActivity, List<Activity> childActivities, User user, List<Comment> comments, List<WorkRegister> workRegisters) {
+        this.id = id;
+        this.name = name;
+        this.time = time;
+        this.dateFrom = dateFrom;
+        this.dateTo = dateTo;
+        this.priority = priority;
+        this.state = state;
+        this.timeWorked = timeWorked;
+        this.description = description;
+        this.motherActivity = motherActivity;
+        this.childActivities = childActivities;
+        this.user = user;
+        this.comments = comments;
+        this.workRegisters = workRegisters;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 
     public List<Activity> getChildActivities() {

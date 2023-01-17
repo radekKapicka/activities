@@ -1,12 +1,15 @@
 package com.example.activities.web;
 
 import com.example.activities.model.Activity;
+import com.example.activities.model.Comment;
 import com.example.activities.model.User;
 import com.example.activities.model.WorkRegister;
 import com.example.activities.repositories.ActivityRepository;
+import com.example.activities.repositories.CommentRepository;
 import com.example.activities.repositories.UserRepository;
 import com.example.activities.repositories.WorkRegisterRepository;
 import com.example.activities.services.ActivityService;
+import com.example.activities.services.CommentService;
 import com.example.activities.services.UserService;
 import com.example.activities.services.WorkRegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Array;
 import java.sql.Date;
-import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,8 @@ public class ControllerAct {
 
     private final UserService userService;
 
+    private final CommentService commentService;
+
     private final ActivityService activityService;
 
     private final WorkRegisterService workRegisterService;
@@ -43,10 +46,14 @@ public class ControllerAct {
     private ActivityRepository activityRepository;
 
     @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
     private WorkRegisterRepository workRegisterRepository;
 
-    public ControllerAct(UserService userService, ActivityService activityService, WorkRegisterService workRegisterService){
+    public ControllerAct(UserService userService, CommentService commentService, ActivityService activityService, WorkRegisterService workRegisterService){
         this.userService = userService;
+        this.commentService = commentService;
         this.activityService = activityService;
         this.workRegisterService = workRegisterService;
     }
@@ -245,6 +252,26 @@ public class ControllerAct {
         a.setState("new");
         activityService.addActivity(a);
         return "redirect:/user-board";
+    }
+
+    @GetMapping("activity/{id_mother}/addComment")
+    public String addComment(Model m, @PathVariable int id_mother){
+
+        m.addAttribute("newComment", new Comment(new User(),new Activity(),LocalDateTime.now(),""));
+        return "addComent";
+    }
+
+    @PostMapping("activity/{id_mother}/addComment")
+    public String addCommentPost(Model m, @PathVariable int id_mother,  @ModelAttribute Comment c){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userPom = userRepository.findByUsername(authentication.getName());
+        Activity activityPom = activityService.findActivity(id_mother);
+
+        c.setActivity(activityPom);
+        c.setUser(userPom);
+        c.setTime(LocalDateTime.now());
+        commentService.addComment(c);
+        return "redirect:/activity/{id_mother}";
     }
 
 }

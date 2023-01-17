@@ -21,6 +21,10 @@ public class User {
     private List<Activity> activities;
 
     @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL)
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "user",
             orphanRemoval = true,
             cascade = CascadeType.ALL)
     private List<WorkRegister> workRegisters;
@@ -65,7 +69,25 @@ public class User {
         this.role = role;
     }
 
+    public User(int id, String username, String password, List<Activity> activities, List<Comment> comments, List<WorkRegister> workRegisters, String role) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.activities = activities;
+        this.comments = comments;
+        this.workRegisters = workRegisters;
+        this.role = role;
+    }
+
     public User() {
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 
     public List<Activity> getActivities() {

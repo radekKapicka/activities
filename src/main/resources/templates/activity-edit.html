@@ -19,11 +19,14 @@
     </div>
     <form method="post" th:object="${newActivity}">
       <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-4">
           <a class="btn btn-dark" th:href="@{/activity/{id}/addReport(id=${newActivity.getId()})}">Add report for this activity</a>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-4">
           <a class="btn btn-dark" th:href="@{/activity/{id}/createChildActivity(id=${newActivity.getId()})}">Add child to this activity</a>
+        </div>
+        <div class="col-sm-4">
+          <a class="btn btn-dark" th:href="@{/activity/{id}/addComment(id=${newActivity.getId()})}">Add comment</a>
         </div>
       </div>
       <div class="row">
