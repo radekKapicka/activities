@@ -143,3 +143,28 @@ h3{
 .actTreeSide tr td:first-child {
     padding-left: 35px;
 }
+
+.actChildSide td:first-child{
+    padding-left: 70px !important;
+}
+
+.comment{
+    background-color: #DDDDDD;
+    margin-top: 10px;
+    border:1px solid #888888;
+    padding: 10px 20px;
+    margin-bottom: 25px;
+}
+
+.text-username{
+    font-size: 20px !important;
+}
+
+.text-right{
+    text-align: right;
+}
+
+.comment-text{
+    background-color: white;
+    padding: 10px 20px;
+}

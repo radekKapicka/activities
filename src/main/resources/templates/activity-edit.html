@@ -19,13 +19,13 @@
     </div>
     <form method="post" th:object="${newActivity}">
       <div class="row">
-        <div class="col-sm-4">
-          <a class="btn btn-dark" th:href="@{/activity/{id}/addReport(id=${newActivity.getId()})}">Add report for this activity</a>
+        <div class="col-sm-3">
+          <a class="btn btn-dark" th:href="@{/activity/{id}/addReport(id=${newActivity.getId()})}">Add report</a>
         </div>
         <div class="col-sm-4">
           <a class="btn btn-dark" th:href="@{/activity/{id}/createChildActivity(id=${newActivity.getId()})}">Add child to this activity</a>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-5">
           <a class="btn btn-dark" th:href="@{/activity/{id}/addComment(id=${newActivity.getId()})}">Add comment</a>
         </div>
       </div>
@@ -75,18 +75,39 @@
       <input th:replace="~{fragments/inputText :: input ('Description', 'description', 'textArea')}" th:field="*{description}">
       <input class="btn btn-dark" type="submit" value="Submit">
     </form>
+
+    <hr>
+    <h2>Comments</h2>
+    <div>
+      <div class="comment" th:each="comment: ${comments}">
+        <div class="row">
+          <div class="col-sm-3"><p class="text-username" th:text="${comment.user.username}"></p></div>
+          <div class="col-sm-9"><p class="text-right" th:text="${comment.time}"></p></div>
+        </div>
+        <div class="comment-text" th:text="${comment.commentText}">text</div>
+      </div>
+    </div>
+
+
   </div>
   <div class="col-sm-4">
     <h1>Activity tree</h1>
     <table class="table table-striped">
       <thead>
       <tr>
-        <th th:text="${newActivity.name}">Activity Name</th>
-        <th th:text="${newActivity.user.username}">User</th>
+        <th>Parent</th>
+        <th><a th:href="@{/activity/{id}(id=${newActivity.motherActivity.id})}"><span th:text="${newActivity.motherActivity.name}"></span></a></th>
+        <th th:text="${newActivity.motherActivity.user.username}">User</th>
       </tr>
       </thead>
       <tbody class="actTreeSide">
-      <tr th:each="child: ${childActivities}">
+      <tr>
+        <td>This activity</td>
+        <td><span th:text="${newActivity.name}"></span></td>
+        <td th:text="${newActivity.user.username}">1</td>
+      </tr>
+      <tr class="actChildSide" th:each="child: ${childActivities}">
+        <td>Child</td>
         <td><a th:href="@{/activity/{id}(id=${child.id})}"><span th:text="${child.name}"></span></a></td>
         <td th:text="${child.user.username}">1</td>
       </tr>

@@ -129,6 +129,7 @@ public class ControllerAct {
     public String activityPost(Model m,  @ModelAttribute Activity a){
 
         a.setState("new");
+        a.setMotherActivity(a);
         activityService.addActivity(a);
         return "redirect:/user-board";
     }
@@ -146,7 +147,8 @@ public class ControllerAct {
                 findActivity.getState(),
                 findActivity.getTimeWorked(),
                 findActivity.getDescription(),
-                findActivity.getUser()));
+                findActivity.getUser(),
+                findActivity.getMotherActivity()));
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         m.addAttribute("user",authentication.getName());
         List<User> listUser = userRepository.findAll();
@@ -161,6 +163,16 @@ public class ControllerAct {
             }else{i++;}
         }
 
+        List<Comment> commentsPom = commentRepository.findAll();
+        List<Comment> comments = new ArrayList<>();
+
+        for (int i =0; i<commentsPom.size();i++){
+            if(commentsPom.get(i).getActivity().getId() == id){
+                comments.add(commentsPom.get(i));
+            }else{i++;}
+        }
+
+        m.addAttribute("comments", comments);
         m.addAttribute("childActivities", childActivities);
 
         return "activity-edit";
@@ -170,7 +182,6 @@ public class ControllerAct {
     public String updateActPost(@PathVariable int id, Model m, @ModelAttribute Activity a){
         Activity findActivity = activityService.findActivity(id);
         a.setMotherActivity(findActivity.getMotherActivity());
-        System.out.println(a.getMotherActivity());
         activityService.updateActivity(a);
         return "redirect:/user-board";
     }
