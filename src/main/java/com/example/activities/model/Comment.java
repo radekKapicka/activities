@@ -20,7 +20,7 @@ public class Comment {
     @ManyToOne
     private Activity activity;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @DateTimeFormat(pattern = "dd.MM.yyyy'T'HH:mm")
     private LocalDateTime time;
 
     private String commentText;
