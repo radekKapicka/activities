@@ -1,17 +1,11 @@
 package com.example.activities.web;
 
-import com.example.activities.model.Activity;
-import com.example.activities.model.Comment;
-import com.example.activities.model.User;
-import com.example.activities.model.WorkRegister;
+import com.example.activities.model.*;
 import com.example.activities.repositories.ActivityRepository;
 import com.example.activities.repositories.CommentRepository;
 import com.example.activities.repositories.UserRepository;
 import com.example.activities.repositories.WorkRegisterRepository;
-import com.example.activities.services.ActivityService;
-import com.example.activities.services.CommentService;
-import com.example.activities.services.UserService;
-import com.example.activities.services.WorkRegisterService;
+import com.example.activities.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.datetime.DateFormatter;
 import org.springframework.format.datetime.DateFormatterRegistrar;
@@ -88,7 +82,7 @@ public class ControllerAct {
 
         User pomUser = userRepository.findByUsername(authentication.getName());
 
-        List<Activity> activitiesAll = activityRepository.findAll();
+        List<Activity> activitiesAll = activityRepository.findAllActivitiesDesc();
         List<Activity> activitiesNew = new ArrayList<>();
         List<Activity> activitiesToBeImp = new ArrayList<>();
         List<Activity> activitiesDoing = new ArrayList<>();
@@ -177,7 +171,7 @@ public class ControllerAct {
             }else{i++;}
         }
 
-        List<Comment> commentsPom = commentRepository.findAll();
+        List<Comment> commentsPom = commentRepository.findAllCommentsDesc();
         List<Comment> comments = new ArrayList<>();
         List<String> minutesFrom= new ArrayList<>();
 
@@ -250,7 +244,7 @@ public class ControllerAct {
 
         List<WorkRegister> finalReg = new ArrayList<>();
 
-        List<WorkRegister> pomRegister = workRegisterRepository.findAll();
+        List<WorkRegister> pomRegister = workRegisterRepository.findAllReportsDesc();
         List<Float> pomTime = new ArrayList<>();
         List<String> minutesFrom= new ArrayList<>();
         List<String> minutesTo= new ArrayList<>();
@@ -325,4 +319,14 @@ public class ControllerAct {
         return "redirect:/activity/{id_mother}";
     }
 
+    @GetMapping({ "/document.xlsx" })
+    public ActivityXlsxView createXlsxActivityList() {
+        // Here we are returning an object of type 'Vets' rather than a collection of Vet
+        // objects so it is simpler for JSon/Object mapping
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userPom = userRepository.findByUsername(authentication.getName());
+        Activities activities = new Activities();
+        activities.getActivityList().addAll(this.activityRepository.findAllActivitiesDesc());
+        return new ActivityXlsxView(activities,userPom);
+    }
 }

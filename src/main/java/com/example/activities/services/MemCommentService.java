@@ -5,6 +5,7 @@ import com.example.activities.model.Comment;
 import com.example.activities.repositories.ActivityRepository;
 import com.example.activities.repositories.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -35,4 +36,5 @@ public class MemCommentService implements CommentService{
     public Comment findComment(int id) {
         return commentrepo.getOne(id);
     }
+
 }
