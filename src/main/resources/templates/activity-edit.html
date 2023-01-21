@@ -79,22 +79,21 @@
     <hr>
     <h2>Comments</h2>
     <div>
-      <div class="comment" th:each="comment: ${comments}">
+      <div class="comment" th:each="comment, iter: ${comments}">
         <div class="row">
           <div class="col-sm-3"><p class="text-username" th:text="${comment.user.username}"></p></div>
           <div class="col-sm-9 timeComment">
             <span>
-              <p class="text-right" th:text="${comment.time.getHour()}"></p>
-              <p>:</p>
-              <p class="text-right" th:text="${comment.time.getMinute()}"></p>
+              <p class="text-right" th:text="${comment.time.getHour()}"></p><p
+            >:</p><p
+                    class="text-right" th:text="${minutesFrom.get(iter.index)}"></p>
               <p>&nbsp;</p>
-               <p>&nbsp;</p>
               <span class="commentDate">
-                <p class="text-right" th:text="${comment.time.getDayOfMonth()}"></p>
-                <p>/</p>
-                <p class="text-right" th:text="${comment.time.getMonthValue()}"></p>
-                <p>/</p>
-                <p class="text-right" th:text="${comment.time.getYear()}"></p>
+                <p class="text-right" th:text="${comment.time.getDayOfMonth()}"></p><p
+              >/</p><p
+                      class="text-right" th:text="${comment.time.getMonthValue()}"></p><p
+              >/</p><p
+                      class="text-right" th:text="${comment.time.getYear()}"></p>
               </span>
             </span>
           </div>

@@ -18,10 +18,29 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="report: ${reports}">
+    <tr th:each="report, iter: ${reports}">
       <td><a th:href="@{/activity/{id}(id=${report.activity.getId()})}"><span th:text="${report.activity.name}"></span></a></td>
-      <td th:text="${report.timeFrom}">1</td>
-      <td th:text="${report.timeTo}">Mark</td>
+      <td>
+        <p th:text="${report.timeFrom.getDayOfMonth()}"></p><p>/</p><p
+              th:text="${report.timeFrom.getMonthValue()}"></p><p
+      >/</p><p
+              th:text="${report.timeFrom.getYear()}"></p>
+        <span>
+          <p th:text="${report.timeFrom.getHour()}"></p><p>:</p><p th:text="${minutesFrom.get(iter.index)}"></p>
+        </span>
+      </td>
+      <td>
+        <span>
+          <p th:text="${report.timeTo.getDayOfMonth()}"></p><p
+        >/</p><p
+                th:text="${report.timeTo.getMonthValue()}"></p><p
+        >/</p><p
+                th:text="${report.timeTo.getYear()}"></p>
+        </span>
+        <span class="workHour">
+          <p th:text="${report.timeTo.getHour()}"></p><p>:</p><p th:text="${minutesTo.get(iter.index)}"></p>
+        </span>
+      </td>
       <td th:text="${report.partOfTime}">@mdo</td>
     </tr>
     </tbody>

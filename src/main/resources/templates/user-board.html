@@ -18,7 +18,7 @@
                 <div class="col-sm-10"><h2>New activities</h2></div>
                 <div class="num-of-activities col-sm-2" th:text="${numOfActivitiesNew}"></div>
             </div>
-            <div class="activity-card" th:each="activity: ${activitiesNew}">
+            <div class="activity-card" th:each="activity, iter: ${activitiesNew}">
                 <div class="row priority-inline">
                     <div class="col-sm-7"><a th:href="@{/activity/{id}(id=${activity.id})}"><h3 th:text="${activity.name}"></h3></a></div>
                     <div class="col-sm-5">Priority: <p th:text="${activity.priority}"></p></div>
@@ -28,8 +28,28 @@
                     <div class="col-sm-6"><b>from</b><p th:text="${activity.time}"></p></div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-6"><b>Date from</b><p th:text="${activity.dateFrom}"></p></div>
-                    <div class="col-sm-6"><b>Date to</b><p th:text="${activity.dateTo}"></p></div>
+                    <div class="col-sm-11 progress progressBar">
+                        <div class="progress-bar" role="progressbar"
+                             th:style="'width:' + ${(activity.timeWorked / (activity.time/100))} + '%'">
+                            <span th:text="${(activity.timeWorked / (activity.time/100)) + ' %'}">70%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 commentDateBoard"><div><b>Date from</b></div>
+                        <p th:text="${activity.dateFrom.toLocalDate().getDayOfMonth()}"></p><p
+                        >/</p><p
+                                th:text="${activity.dateFrom.toLocalDate().getMonthValue()}"></p><p
+                        >/</p><p
+                                th:text="${activity.dateFrom.toLocalDate().getYear()}"></p>
+                    </div>
+                    <div class="col-sm-6 commentDateBoard"><div><b>Date from</b></div>
+                        <p th:text="${activity.dateTo.toLocalDate().getDayOfMonth()}"></p><p
+                        >/</p><p
+                                th:text="${activity.dateTo.toLocalDate().getMonthValue()}"></p><p
+                        >/</p><p
+                                th:text="${activity.dateTo.toLocalDate().getYear()}"></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -48,8 +68,28 @@
                     <div class="col-sm-6"><b>from</b><p th:text="${activity.time}"></p></div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-6"><b>Date from</b><p th:text="${activity.dateFrom}"></p></div>
-                    <div class="col-sm-6"><b>Date to</b><p th:text="${activity.dateTo}"></p></div>
+                    <div class="col-sm-11 progress progressBar">
+                        <div class="progress-bar" role="progressbar"
+                             th:style="'width:' + ${(activity.timeWorked / (activity.time/100))} + '%'">
+                            <span th:text="${(activity.timeWorked / (activity.time/100)) + ' %'}">70%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 commentDateBoard"><div><b>Date from</b></div>
+                        <p th:text="${activity.dateFrom.toLocalDate().getDayOfMonth()}"></p><p
+                        >/</p><p
+                                th:text="${activity.dateFrom.toLocalDate().getMonthValue()}"></p><p
+                        >/</p><p
+                                th:text="${activity.dateFrom.toLocalDate().getYear()}"></p>
+                    </div>
+                    <div class="col-sm-6 commentDateBoard"><div><b>Date from</b></div>
+                        <p th:text="${activity.dateTo.toLocalDate().getDayOfMonth()}"></p><p
+                        >/</p><p
+                                th:text="${activity.dateTo.toLocalDate().getMonthValue()}"></p><p
+                        >/</p><p
+                                th:text="${activity.dateTo.toLocalDate().getYear()}"></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -68,8 +108,28 @@
                     <div class="col-sm-6"><b>from</b><p th:text="${activity.time}"></p></div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-6"><b>Date from</b><p th:text="${activity.dateFrom}"></p></div>
-                    <div class="col-sm-6"><b>Date to</b><p th:text="${activity.dateTo}"></p></div>
+                    <div class="col-sm-11 progress progressBar">
+                        <div class="progress-bar" role="progressbar"
+                             th:style="'width:' + ${(activity.timeWorked / (activity.time/100))} + '%'">
+                            <span th:text="${(activity.timeWorked / (activity.time/100)) + ' %'}">70%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 commentDateBoard"><div><b>Date from</b></div>
+                        <p th:text="${activity.dateFrom.toLocalDate().getDayOfMonth()}"></p><p
+                        >/</p><p
+                                th:text="${activity.dateFrom.toLocalDate().getMonthValue()}"></p><p
+                        >/</p><p
+                                th:text="${activity.dateFrom.toLocalDate().getYear()}"></p>
+                    </div>
+                    <div class="col-sm-6 commentDateBoard"><div><b>Date from</b></div>
+                        <p th:text="${activity.dateTo.toLocalDate().getDayOfMonth()}"></p><p
+                        >/</p><p
+                                th:text="${activity.dateTo.toLocalDate().getMonthValue()}"></p><p
+                        >/</p><p
+                                th:text="${activity.dateTo.toLocalDate().getYear()}"></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -88,8 +148,28 @@
                     <div class="col-sm-6"><b>from</b><p th:text="${activity.time}"></p></div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-6"><b>Date from</b><p th:text="${activity.dateFrom}"></p></div>
-                    <div class="col-sm-6"><b>Date to</b><p th:text="${activity.dateTo}"></p></div>
+                    <div class="col-sm-11 progress progressBar">
+                        <div class="progress-bar" role="progressbar"
+                             th:style="'width:' + ${(activity.timeWorked / (activity.time/100))} + '%'">
+                            <span th:text="${(activity.timeWorked / (activity.time/100)) + ' %'}">70%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 commentDateBoard"><div><b>Date from</b></div>
+                        <p th:text="${activity.dateFrom.toLocalDate().getDayOfMonth()}"></p><p
+                        >/</p><p
+                                th:text="${activity.dateFrom.toLocalDate().getMonthValue()}"></p><p
+                        >/</p><p
+                                th:text="${activity.dateFrom.toLocalDate().getYear()}"></p>
+                    </div>
+                    <div class="col-sm-6 commentDateBoard"><div><b>Date from</b></div>
+                        <p th:text="${activity.dateTo.toLocalDate().getDayOfMonth()}"></p><p
+                        >/</p><p
+                                th:text="${activity.dateTo.toLocalDate().getMonthValue()}"></p><p
+                        >/</p><p
+                                th:text="${activity.dateTo.toLocalDate().getYear()}"></p>
+                    </div>
                 </div>
             </div>
         </div>

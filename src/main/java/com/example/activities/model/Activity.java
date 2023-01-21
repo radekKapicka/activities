@@ -1,5 +1,7 @@
 package com.example.activities.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ public class Activity {
 
     private String name;
     private float time;
+
     private Date dateFrom;
     private Date dateTo;
     private float priority;

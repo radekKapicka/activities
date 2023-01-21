@@ -181,3 +181,34 @@ h3{
     font-size: 13px !important;
 }
 
+.commentDateBoard p{
+    font-size: 13px !important;
+    display: inline;
+}
+
+td p{
+    font-size: 13px !important;
+    display: inline;
+}
+
+p{
+    margin:0 !important;
+}
+li{
+    display: inline-block;
+}
+
+.progress{
+    padding: 0 !important;
+    height: 1.25rem !important;
+}
+
+.progress-bar{
+    height: 1.25rem !important;
+}
+
+.progressBar{
+    margin: auto !important;
+    margin-bottom: 10px !important;
+}
+

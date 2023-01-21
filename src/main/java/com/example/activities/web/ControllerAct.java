@@ -13,6 +13,8 @@ import com.example.activities.services.CommentService;
 import com.example.activities.services.UserService;
 import com.example.activities.services.WorkRegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.datetime.DateFormatter;
+import org.springframework.format.datetime.DateFormatterRegistrar;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,6 +23,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -90,9 +93,18 @@ public class ControllerAct {
         List<Activity> activitiesToBeImp = new ArrayList<>();
         List<Activity> activitiesDoing = new ArrayList<>();
         List<Activity> activitiesDone = new ArrayList<>();
+        List<Float> timePercNew = new ArrayList<>();
+
 
         for (int i = 0; i< activitiesAll.size();i++){
             if(activitiesAll.get(i).getUser().getId() == pomUser.getId() && activitiesAll.get(i).getState().equals("new")){
+                if(activitiesAll.get(i).getTime() < activitiesAll.get(i).getTimeWorked()){
+                    timePercNew.add(
+                            activitiesAll.get(i).getTimeWorked() /
+                            (activitiesAll.get(i).getTime() / 100));
+                }else{
+                    timePercNew.add(activitiesAll.get(i).getTime());
+                }
                 activitiesNew.add(activitiesAll.get(i));
             }else if(activitiesAll.get(i).getUser().getId() == pomUser.getId() && activitiesAll.get(i).getState().equals("toBeImp")){
                 activitiesToBeImp.add(activitiesAll.get(i));
@@ -103,6 +115,7 @@ public class ControllerAct {
             }
         }
 
+        m.addAttribute("timePercNew",timePercNew);
         m.addAttribute("activitiesNew",activitiesNew);
         m.addAttribute("activitiesToBeImp",activitiesToBeImp);
         m.addAttribute("activitiesDoing",activitiesDoing);
@@ -121,8 +134,8 @@ public class ControllerAct {
         m.addAttribute("user",authentication.getName());
         List<User> listUser = userRepository.findAll();
         m.addAttribute("usersFind", listUser);
-        m.addAttribute("newActivity", new Activity("", 0f, new Date(2023-01-11),
-                new Date(2023-01-11),0f,"","", new User(),0));
+        m.addAttribute("newActivity", new Activity("", 0f, new Date(02-22-22),
+                new Date(2-22-2022),0f,"","", new User(),0));
         return "activity";
     }
 
@@ -166,13 +179,23 @@ public class ControllerAct {
 
         List<Comment> commentsPom = commentRepository.findAll();
         List<Comment> comments = new ArrayList<>();
+        List<String> minutesFrom= new ArrayList<>();
 
         for (int i =0; i<commentsPom.size();i++){
             if(commentsPom.get(i).getActivity().getId() == id){
                 comments.add(commentsPom.get(i));
+
+                if(commentsPom.get(i).getTime().getMinute() < 10){
+                    String minFormatted = String.format("%02d", commentsPom.get(i).getTime().getMinute());
+                    minutesFrom.add(minFormatted);
+                }else{
+                    String minToString = Integer.toString(commentsPom.get(i).getTime().getMinute());
+                    minutesFrom.add(minToString);
+                }
             }else{i++;}
         }
 
+        m.addAttribute("minutesFrom", minutesFrom);
         m.addAttribute("comments", comments);
         m.addAttribute("childActivities", childActivities);
 
@@ -229,14 +252,30 @@ public class ControllerAct {
 
         List<WorkRegister> pomRegister = workRegisterRepository.findAll();
         List<Float> pomTime = new ArrayList<>();
+        List<String> minutesFrom= new ArrayList<>();
+        List<String> minutesTo= new ArrayList<>();
 
         for(int i =0; i < pomRegister.size();i++){
             if(pomRegister.get(i).getUser() == pomUser){
                 finalReg.add(pomRegister.get(i));
-
+                if(pomRegister.get(i).getTimeFrom().getMinute() < 10){
+                    String minFormatted = String.format("%02d", pomRegister.get(i).getTimeFrom().getMinute());
+                    minutesFrom.add(minFormatted);
+                }else if(pomRegister.get(i).getTimeFrom().getMinute() >= 10){
+                    String minToString = Integer.toString(pomRegister.get(i).getTimeFrom().getMinute());
+                    minutesFrom.add(minToString);
+                }
+                if(pomRegister.get(i).getTimeTo().getMinute() < 10){
+                    String minFormattedTo = String.format("%02d", pomRegister.get(i).getTimeTo().getMinute());
+                    minutesTo.add(minFormattedTo);
+                }else if(pomRegister.get(i).getTimeTo().getMinute() >= 10){
+                    String minToString = Integer.toString(pomRegister.get(i).getTimeTo().getMinute());
+                    minutesTo.add(minToString);
+                }
             }
         }
-
+        m.addAttribute("minutesTo", minutesTo);
+        m.addAttribute("minutesFrom", minutesFrom);
         m.addAttribute("user",authentication.getName());
         m.addAttribute("reports",finalReg);
         return "workReports";
