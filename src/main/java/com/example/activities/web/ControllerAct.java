@@ -276,10 +276,12 @@ public class ControllerAct {
     }
 
     @GetMapping("activity/{id_mother}/createChildActivity")
-    public String childActivity(Model m){
+    public String childActivity(Model m, @PathVariable int id_mother){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         m.addAttribute("user",authentication.getName());
         List<User> listUser = userRepository.findAll();
+        Activity activityPom = activityService.findActivity(id_mother);
+        m.addAttribute("actualActivity", activityPom);
         m.addAttribute("usersFind", listUser);
         m.addAttribute("newActivityChild", new Activity(0,"", 0f, new Date(2023-01-11),
                 new Date(2023-01-11),0f,"",0f, "",new User()));
@@ -302,6 +304,8 @@ public class ControllerAct {
     @GetMapping("activity/{id_mother}/addComment")
     public String addComment(Model m, @PathVariable int id_mother){
 
+        Activity activityPom = activityService.findActivity(id_mother);
+        m.addAttribute("actualActivity", activityPom);
         m.addAttribute("newComment", new Comment(new User(),new Activity(),LocalDateTime.now(),""));
         return "addComent";
     }
@@ -319,14 +323,14 @@ public class ControllerAct {
         return "redirect:/activity/{id_mother}";
     }
 
-    @GetMapping({ "/document.xlsx" })
-    public ActivityXlsxView createXlsxActivityList() {
+    @GetMapping({ "activity/{id_mother}/document.xlsx" })
+    public ActivityXlsxView createXlsxActivityList(Model m, @PathVariable int id_mother) {
         // Here we are returning an object of type 'Vets' rather than a collection of Vet
         // objects so it is simpler for JSon/Object mapping
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User userPom = userRepository.findByUsername(authentication.getName());
-        Activities activities = new Activities();
-        activities.getActivityList().addAll(this.activityRepository.findAllActivitiesDesc());
-        return new ActivityXlsxView(activities,userPom);
+        WorkRegisters workRegisters = new WorkRegisters();
+        Activity activityPom = new Activity();
+        activityPom = activityService.findActivity(id_mother);
+        workRegisters.getRegisterList().addAll(this.workRegisterRepository.findAllReportsDesc());
+        return new ActivityXlsxView(activityPom,workRegisters);
     }
 }

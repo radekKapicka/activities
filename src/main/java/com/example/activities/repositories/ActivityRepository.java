@@ -12,6 +12,6 @@ import java.util.List;
 @Repository("activityRepository")
 public interface ActivityRepository extends JpaRepository<Activity,Integer> {
 
-    @Query("SELECT a FROM Activity a ORDER BY a.dateTo DESC")
+    @Query("SELECT a FROM Activity a ORDER BY a.priority DESC")
     List<Activity> findAllActivitiesDesc();
 }

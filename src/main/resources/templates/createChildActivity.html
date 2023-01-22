@@ -32,7 +32,14 @@
       </div>
       </div>
       <input th:replace="~{fragments/inputText :: input ('Description', 'description', 'textArea')}" th:field="*{description}">
-      <input class="btn btn-dark" type="submit" value="Submit">
+      <div class="row">
+        <div class="col-sm-3">
+          <input class="btn btn-success" type="submit" value="Submit">
+        </div>
+        <div class="col-sm-9">
+          <a th:href="@{/activity/{id}(id=${actualActivity.id})}" class="btn btn-dark btndarkTop">Back to activity</a>
+        </div>
+      </div>
     </form>
   </div>
 </div>

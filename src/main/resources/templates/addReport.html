@@ -14,10 +14,10 @@
       <form method="post" th:object="${newReport}">
         <div class="row">
           <div class="col-sm-6">
-            <input th:replace="~{fragments/inputText :: input ('Time from', 'timeFrom', 'datetime-local')}" th:field="*{timeFrom}">
+            <input th:replace="~{fragments/inputText :: input ('From', 'timeFrom', 'datetime-local')}" th:field="*{timeFrom}">
           </div>
           <div class="col-sm-6">
-            <input th:replace="~{fragments/inputText :: input ('Time to', 'timeTo', 'datetime-local')}" th:field="*{timeTo}">
+            <input th:replace="~{fragments/inputText :: input ('To', 'timeTo', 'datetime-local')}" th:field="*{timeTo}">
           </div>
         </div>
         <div class="row">

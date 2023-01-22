@@ -19,14 +19,21 @@
     </div>
     <form method="post" th:object="${newActivity}">
       <div class="row">
-        <div class="col-sm-3">
+        <div class="col-sm-2">
           <a class="btn btn-dark" th:href="@{/activity/{id}/addReport(id=${newActivity.getId()})}">Add report</a>
         </div>
-        <div class="col-sm-4">
-          <a class="btn btn-dark" th:href="@{/activity/{id}/createChildActivity(id=${newActivity.getId()})}">Add child to this activity</a>
+        <div class="col-sm-2">
+          <a class="btn btn-dark" th:href="@{/activity/{id}/createChildActivity(id=${newActivity.getId()})}">Add child</a>
         </div>
-        <div class="col-sm-5">
+        <div class="col-sm-2">
           <a class="btn btn-dark" th:href="@{/activity/{id}/addComment(id=${newActivity.getId()})}">Add comment</a>
+        </div>
+        <div th:switch="${newActivity.state}" class="col-sm-3">
+          <a th:case="'done'" class="btn btn-dark" th:href="@{/activity/{id}/document.xlsx(id=${newActivity.getId()})}">Generate report</a>
+          <a th:case="*" class="btn btn-dark invisible">Generate report</a>
+        </div>
+        <div class="col-sm-2 container">
+
         </div>
       </div>
       <div class="row">
@@ -73,7 +80,7 @@
       </div>
       </div>
       <input th:replace="~{fragments/inputText :: input ('Description', 'description', 'textArea')}" th:field="*{description}">
-      <input class="btn btn-dark" type="submit" value="Submit">
+      <input class="btn btn-success" type="submit" value="Submit">
     </form>
 
     <hr>
