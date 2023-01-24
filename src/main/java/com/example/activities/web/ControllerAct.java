@@ -1,5 +1,6 @@
 package com.example.activities.web;
 
+import com.example.activities.exception.PassNotMatchingException;
 import com.example.activities.model.*;
 import com.example.activities.repositories.ActivityRepository;
 import com.example.activities.repositories.CommentRepository;
@@ -58,16 +59,22 @@ public class ControllerAct {
     @GetMapping("registration")
     //@ResponseBody
     public String registration(Model m){
-        m.addAttribute("newUser", new User("","", "user"));
+        m.addAttribute("newUser", new User("","", ""));
         return "login-screen";
     }
 
     @PostMapping("registration")
-    public String registrationPost(Model m, @ModelAttribute User u){
-        u.setPassword(passwordEncoder.encode(u.getPassword()));
-        u.setRole("user");
-        userService.addUser(u);
-        return "redirect:/login";
+    public String registrationPost(Model m, @ModelAttribute User u) throws PassNotMatchingException {
+
+        if (u.getPassword().equals(u.getRole())){
+            u.setPassword(passwordEncoder.encode(u.getPassword()));
+            u.setRole("user");
+            userService.addUser(u);
+            return "redirect:/login";
+        }else{
+
+            throw new PassNotMatchingException("Pass not maching");
+        }
     }
 
     @GetMapping("login")

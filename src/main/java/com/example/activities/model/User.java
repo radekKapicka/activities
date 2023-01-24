@@ -1,5 +1,6 @@
 package com.example.activities.model;
 
+import com.sun.istack.NotNull;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;

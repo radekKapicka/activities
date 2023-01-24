@@ -20,6 +20,7 @@
         <form method="post" th:object="${newUser}">
             <input th:replace="~{fragments/inputText :: input ('Login', 'username', 'text')}" th:field="*{username}">
             <input th:replace="~{fragments/inputText :: input ('Password', 'password', 'password')}" th:field="*{password}">
+            <input th:replace="~{fragments/inputText :: input ('Password repeat', 'role', 'password')}" th:field="*{role}">
             <div class="row buttons-bottom">
                 <div class="form-actions col-sm-3">
                     <button type="submit" class="btn btn-success">Register</button>
