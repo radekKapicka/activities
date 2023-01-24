@@ -61,7 +61,7 @@ xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
       </ul>
       <div class="fa fa-username">
         Logged user:
-        <span th:text="${user}"></span>
+        <a class="userA" th:href="@{/user-edit}"><span th:text="${user}"></span></a>
       </div>
 
       <div class="fa fa-logout" sec:authorize="isAuthenticated()">

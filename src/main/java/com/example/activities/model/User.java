@@ -4,6 +4,7 @@ import com.sun.istack.NotNull;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 
 @Entity
@@ -79,6 +80,7 @@ public class User {
         this.workRegisters = workRegisters;
         this.role = role;
     }
+
 
     public User() {
     }

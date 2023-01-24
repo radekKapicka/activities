@@ -15,14 +15,20 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.regex.Matcher;
 
 @Controller
 @RequestMapping("/")
@@ -56,6 +62,7 @@ public class ControllerAct {
         this.activityService = activityService;
         this.workRegisterService = workRegisterService;
     }
+
     @GetMapping("registration")
     //@ResponseBody
     public String registration(Model m){
@@ -64,18 +71,41 @@ public class ControllerAct {
     }
 
     @PostMapping("registration")
-    public String registrationPost(Model m, @ModelAttribute User u) throws PassNotMatchingException {
+    public String registrationPost(Model m, @Valid @ModelAttribute User u, BindingResult bindingResult, RedirectAttributes redirectAttributes){
 
-        if (u.getPassword().equals(u.getRole())){
-            u.setPassword(passwordEncoder.encode(u.getPassword()));
-            u.setRole("user");
-            userService.addUser(u);
-            return "redirect:/login";
-        }else{
+        List<User> usersPom = userRepository.findAll();
+        boolean pom = false;
+        boolean pomValid = false;
 
-            throw new PassNotMatchingException("Pass not maching");
+
+        for(User usr : usersPom){
+            if(usr.getUsername().equals(u.getUsername())){
+                redirectAttributes.addFlashAttribute("messageUsr", "Username already exist");
+                redirectAttributes.addFlashAttribute("messageUsrNotVisible", "notVis");
+                pom = true;
+            }
         }
+
+        if(!isPassValid(u.getPassword())){
+            redirectAttributes.addFlashAttribute("messageValid", "Password is not valid!");
+            redirectAttributes.addFlashAttribute("messageValidNotVisible", "notVis");
+            pomValid = true;
+        }
+
+            if (u.getPassword().equals(u.getRole()) && !pom && !pomValid){
+                u.setPassword(passwordEncoder.encode(u.getPassword()));
+                u.setRole("user");
+                userService.addUser(u);
+                redirectAttributes.addFlashAttribute("messageRegSucc", "Registration completed succesfull! You may log in!");
+                redirectAttributes.addFlashAttribute("messageRegSuccNotVisible", "notVis");
+                return "redirect:/login";
+            }else if(!u.getPassword().equals(u.getRole())){
+                redirectAttributes.addFlashAttribute("messagePass", "Passwords not matching");
+                redirectAttributes.addFlashAttribute("messagePassNotVisible", "notVis");
+            }
+        return "redirect:/registration";
     }
+
 
     @GetMapping("login")
         public String login(){
@@ -339,5 +369,60 @@ public class ControllerAct {
         activityPom = activityService.findActivity(id_mother);
         workRegisters.getRegisterList().addAll(this.workRegisterRepository.findAllReportsDesc());
         return new ActivityXlsxView(activityPom,workRegisters);
+    }
+
+    @GetMapping("user-edit")
+    public String editUser(Model m){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        m.addAttribute("user",authentication.getName());
+
+        m.addAttribute("userEdit",new User());
+        return "userEdit";
+    }
+
+    @PostMapping("user-edit")
+    public String editUserPost(Model m,  @ModelAttribute User u, RedirectAttributes redirectAttributes){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User myUser = userRepository.findByUsername(authentication.getName());
+        u.setId(myUser.getId());
+        u.setUsername(myUser.getUsername());
+        u.setActivities(myUser.getActivities());
+        u.setComments(myUser.getComments());
+        u.setWorkRegisters(myUser.getWorkRegisters());
+
+        boolean pomValid = false;
+
+        if(!isPassValid(u.getPassword())){
+            redirectAttributes.addFlashAttribute("messageValid", "Password is not valid!");
+            redirectAttributes.addFlashAttribute("messageValidNotVisible", "notVis");
+            pomValid = true;
+        }
+
+        if (u.getPassword().equals(u.getRole()) && !pomValid){
+            u.setPassword(passwordEncoder.encode(u.getPassword()));
+            u.setRole("user");
+            System.out.println(u.getId());
+            userService.updateUser(u);
+            redirectAttributes.addFlashAttribute("messageRegSucc", "Registration completed succesfull! You may log in!");
+            redirectAttributes.addFlashAttribute("messageRegSuccNotVisible", "notVis");
+            return "redirect:/user-board";
+        }else if(!u.getPassword().equals(u.getRole())){
+            redirectAttributes.addFlashAttribute("messagePass", "Passwords not matching");
+            redirectAttributes.addFlashAttribute("messagePassNotVisible", "notVis");
+        }
+
+
+        return "redirect:/user-edit";
+    }
+
+    public static boolean isPassValid(String password)
+    {
+        if(password.matches("(?!.*[^A-Za-z0-9])(?=.{6,}).*\\d.*\\d.*")) {
+            System.out.println("Password is valid");
+            return true;
+        }else {
+            return false;
+        }
+
     }
 }

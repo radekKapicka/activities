@@ -13,6 +13,7 @@
     <div class="col-sm-4 card">
       <div >
         <h1>Please Login</h1>
+        <span th:class="${messageRegSuccNotVisible}+' vis'"><div class="alert alert-success" role="alert" th:text="${messageRegSucc}"></div></span>
       </div>
       <div class="card-block">
         <form name="f" th:action="@{/signin}" method="post">

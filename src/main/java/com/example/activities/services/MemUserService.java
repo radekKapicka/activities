@@ -1,5 +1,6 @@
 package com.example.activities.services;
 
+import com.example.activities.model.Activity;
 import com.example.activities.model.User;
 import com.example.activities.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,5 +30,10 @@ public class MemUserService implements UserService{
         public void addUser(User u) {
             userrepo.save(u);
         }
+
+    @Override
+    public User updateUser(User user) {
+        return userrepo.save(user);
+    }
 
 }

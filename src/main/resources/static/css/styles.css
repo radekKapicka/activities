@@ -120,9 +120,6 @@ h3{
     margin-bottom: 10px;
 }
 
-.card-block form fieldset div div a{
-    margin-top: 0 !important;
-}
 
 .buttons-bottom{
     margin-top: 10px !important;
@@ -211,6 +208,18 @@ li{
 
 .invisible{
     display: none;
+}
+
+.notVis{
+    display:block !important;
+}
+
+.vis{
+    display: none;
+}
+
+.userA{
+    color:white !important;
 }
 
 

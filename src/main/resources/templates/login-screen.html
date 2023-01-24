@@ -7,10 +7,12 @@
     <title>Good Thymes Virtual Grocery</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
           rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
           crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -19,8 +21,14 @@
         <H1>Registration</H1>
         <form method="post" th:object="${newUser}">
             <input th:replace="~{fragments/inputText :: input ('Login', 'username', 'text')}" th:field="*{username}">
+            <span th:class="${messageUsrNotVisible}+' vis'"><div class="alert alert-danger" role="alert" th:text="${messageUsr}"></div></span>
+            <button type="button" class="btn btn-secondary btnInfo" data-bs-toggle="tooltip" data-bs-placement="top" th:title="'A password must have at least ten characters. A password consists of only letters and digits. A password must contain at least two digits.'">
+                i
+            </button>
             <input th:replace="~{fragments/inputText :: input ('Password', 'password', 'password')}" th:field="*{password}">
+            <span th:class="${messageValidNotVisible}+' vis'"><div class="alert alert-danger" role="alert" th:text="${messageValid}"></div></span>
             <input th:replace="~{fragments/inputText :: input ('Password repeat', 'role', 'password')}" th:field="*{role}">
+            <span th:class="${messagePassNotVisible}+' vis'"><div class="alert alert-danger" role="alert" th:text="${messagePass}"></div></span>
             <div class="row buttons-bottom">
                 <div class="form-actions col-sm-3">
                     <button type="submit" class="btn btn-success">Register</button>
@@ -32,6 +40,13 @@
         </form>
     </div>
 </div>
+<script>
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+</script>
 </body>
 
 </html>
