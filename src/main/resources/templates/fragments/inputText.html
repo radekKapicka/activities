@@ -15,6 +15,7 @@
                     <input th:case="'password'" class="form-control" type="password" th:field="*{__${name}__}" required/>
                     <input th:case="'number'" step=".01" class="form-control" type="number" th:field="*{__${name}__}" required/>
                     <textarea th:case="'textArea'" class="form-control" type="textArea" th:field="*{__${name}__}" ></textarea>
+                    <textarea th:case="'textAreaReq'" class="form-control" type="textArea" th:field="*{__${name}__}" required></textarea>
                 </div>
                 <span th:if="${valid}"
                       class="fa fa-ok form-control-feedback"

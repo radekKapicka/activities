@@ -19,6 +19,9 @@
                 <div class="num-of-activities col-sm-2" th:text="${numOfActivitiesNew}"></div>
             </div>
             <div class="activity-card" th:each="activity, iter: ${activitiesNew}">
+                <div th:switch="${userActual.role}">
+                    <div th:case="'admin'" class="col-sm-12 userNameCard">Assigned to user: <b th:text="${activity.user.username}"></b></div>
+                </div>
                 <div class="row priority-inline">
                     <div class="col-sm-8"><a th:href="@{/activity/{id}(id=${activity.id})}"><h3 th:text="${activity.name}"></h3></a></div>
                     <div class="col-sm-4">Priority: <p th:text="${activity.priority}"></p></div>
@@ -59,6 +62,9 @@
                 <div class="num-of-activities col-sm-2" th:text="${numOfActivitiesTBI}"></div>
             </div>
             <div class="activity-card" th:each="activity: ${activitiesToBeImp}">
+                <div th:switch="${userActual.role}">
+                    <div th:case="'admin'" class="col-sm-12 userNameCard">Assigned to user: <b th:text="${activity.user.username}"></b></div>
+                </div>
                 <div class="row priority-inline">
                     <div class="col-sm-8"><a th:href="@{/activity/{id}(id=${activity.id})}"><h3 th:text="${activity.name}"></h3></a></h3></div>
                     <div class="col-sm-4">Priority: <p th:text="${activity.priority}"></p></div>
@@ -99,6 +105,9 @@
                 <div class="num-of-activities col-sm-2" th:text="${numOfActivitiesWO}"></div>
             </div>
             <div class="activity-card" th:each="activity: ${activitiesDoing}">
+                <div th:switch="${userActual.role}">
+                    <div th:case="'admin'" class="col-sm-12 userNameCard">Assigned to user: <b th:text="${activity.user.username}"></b></div>
+                </div>
                 <div class="row priority-inline">
                     <div class="col-sm-8"><a th:href="@{/activity/{id}(id=${activity.id})}"><h3 th:text="${activity.name}"></h3></a></div>
                     <div class="col-sm-4">Priority: <p th:text="${activity.priority}"></p></div>
@@ -139,6 +148,9 @@
                 <div class="num-of-activities col-sm-2" th:text="${numOfActivitiesDone}"></div>
             </div>
             <div class="activity-card" th:each="activity: ${activitiesDone}">
+                <div th:switch="${userActual.role}">
+                    <div th:case="'admin'" class="col-sm-12 userNameCard">Assigned to user: <b th:text="${activity.user.username}"></b></div>
+                </div>
                 <div class="row priority-inline">
                     <div class="col-sm-8"><a th:href="@{/activity/{id}(id=${activity.id})}"><h3 th:text="${activity.name}"></h3></a></div>
                     <div class="col-sm-4">Priority: <p th:text="${activity.priority}"></p></div>

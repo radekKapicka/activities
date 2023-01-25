@@ -222,4 +222,12 @@ li{
     color:white !important;
 }
 
+.userNameCard{
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.bthFilter{
+    margin-top:24px !important;
+}
 

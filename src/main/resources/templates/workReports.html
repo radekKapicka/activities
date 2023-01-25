@@ -8,6 +8,23 @@
 </head>
 <body>
 <div class="row">
+  <div th:switch="${userActual.role}">
+    <div th:case="'admin'">
+      <form method="post" th:object="${actTest}">
+        <div class="row">
+          <div class="col-sm-2">
+            <label>Filter by user</label></br>
+            <select class="form-select" th:field="*{user}">
+              <option th:each="userNew: ${usersFind}" th:value="${userNew.id}" th:text="${userNew.username}"></option>
+            </select>
+          </div>
+          <div class="col-sm-3">
+            <input class="btn btn-success bthFilter" type="submit" value="Submit">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
   <table class="table table-striped">
     <thead>
     <tr>

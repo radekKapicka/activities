@@ -35,7 +35,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
 
     private static final String[] WHITE_LIST_URLS = {
       "/registration",
-      "registration"
+      "registration",
+            "404",
+            "/404"
     };
 
     @Override
@@ -45,6 +47,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .authorizeRequests()
                 .antMatchers("/workReports").hasRole("user")
                 .antMatchers("/workReports").authenticated()
+                .antMatchers("/workReports/**").hasRole("admin")
+                .antMatchers("/workReports/**").authenticated()
                 .antMatchers("/user-edit").hasRole("user")
                 .antMatchers("/user-edit").authenticated()
                 .antMatchers("/user-board").hasRole("user")
@@ -66,8 +70,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .passwordParameter("txtPassword")
                 .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/user-board");
-                //.and()
-                //.rememberMe().tokenValiditySeconds(2592000).key("mySecret!").rememberMeParameter("checkRememberMe");
+
     }
 
     /*

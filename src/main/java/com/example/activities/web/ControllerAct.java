@@ -63,6 +63,11 @@ public class ControllerAct {
         this.workRegisterService = workRegisterService;
     }
 
+    @RequestMapping("/")
+    public String index() {
+        return "redirect:/user-board";
+    }
+
     @GetMapping("registration")
     //@ResponseBody
     public String registration(Model m){
@@ -119,6 +124,8 @@ public class ControllerAct {
 
         User pomUser = userRepository.findByUsername(authentication.getName());
 
+        m.addAttribute("userActual",pomUser);
+
         List<Activity> activitiesAll = activityRepository.findAllActivitiesDesc();
         List<Activity> activitiesNew = new ArrayList<>();
         List<Activity> activitiesToBeImp = new ArrayList<>();
@@ -127,24 +134,46 @@ public class ControllerAct {
         List<Float> timePercNew = new ArrayList<>();
 
 
-        for (int i = 0; i< activitiesAll.size();i++){
-            if(activitiesAll.get(i).getUser().getId() == pomUser.getId() && activitiesAll.get(i).getState().equals("new")){
-                if(activitiesAll.get(i).getTime() < activitiesAll.get(i).getTimeWorked()){
-                    timePercNew.add(
-                            activitiesAll.get(i).getTimeWorked() /
-                            (activitiesAll.get(i).getTime() / 100));
-                }else{
-                    timePercNew.add(activitiesAll.get(i).getTime());
+        if(pomUser.getRole().equals("user")){
+            for (int i = 0; i< activitiesAll.size();i++){
+                if(activitiesAll.get(i).getUser().getId() == pomUser.getId() && activitiesAll.get(i).getState().equals("new")){
+                    if(activitiesAll.get(i).getTime() < activitiesAll.get(i).getTimeWorked()){
+                        timePercNew.add(
+                                activitiesAll.get(i).getTimeWorked() /
+                                        (activitiesAll.get(i).getTime() / 100));
+                    }else{
+                        timePercNew.add(activitiesAll.get(i).getTime());
+                    }
+                    activitiesNew.add(activitiesAll.get(i));
+                }else if(activitiesAll.get(i).getUser().getId() == pomUser.getId() && activitiesAll.get(i).getState().equals("toBeImp")){
+                    activitiesToBeImp.add(activitiesAll.get(i));
+                }else if(activitiesAll.get(i).getUser().getId() == pomUser.getId() && activitiesAll.get(i).getState().equals("doing")) {
+                    activitiesDoing.add(activitiesAll.get(i));
+                }else if(activitiesAll.get(i).getUser().getId() == pomUser.getId() && activitiesAll.get(i).getState().equals("done")) {
+                    activitiesDone.add(activitiesAll.get(i));
                 }
-                activitiesNew.add(activitiesAll.get(i));
-            }else if(activitiesAll.get(i).getUser().getId() == pomUser.getId() && activitiesAll.get(i).getState().equals("toBeImp")){
-                activitiesToBeImp.add(activitiesAll.get(i));
-            }else if(activitiesAll.get(i).getUser().getId() == pomUser.getId() && activitiesAll.get(i).getState().equals("doing")) {
-                activitiesDoing.add(activitiesAll.get(i));
-            }else if(activitiesAll.get(i).getUser().getId() == pomUser.getId() && activitiesAll.get(i).getState().equals("done")) {
-                activitiesDone.add(activitiesAll.get(i));
+            }
+        } else if (pomUser.getRole().equals("admin")) {
+            for (int i = 0; i< activitiesAll.size();i++){
+                if(activitiesAll.get(i).getState().equals("new")){
+                    if(activitiesAll.get(i).getTime() < activitiesAll.get(i).getTimeWorked()){
+                        timePercNew.add(
+                                activitiesAll.get(i).getTimeWorked() /
+                                        (activitiesAll.get(i).getTime() / 100));
+                    }else{
+                        timePercNew.add(activitiesAll.get(i).getTime());
+                    }
+                    activitiesNew.add(activitiesAll.get(i));
+                }else if(activitiesAll.get(i).getState().equals("toBeImp")){
+                    activitiesToBeImp.add(activitiesAll.get(i));
+                }else if(activitiesAll.get(i).getState().equals("doing")) {
+                    activitiesDoing.add(activitiesAll.get(i));
+                }else if(activitiesAll.get(i).getState().equals("done")) {
+                    activitiesDone.add(activitiesAll.get(i));
+                }
             }
         }
+
 
         m.addAttribute("timePercNew",timePercNew);
         m.addAttribute("activitiesNew",activitiesNew);
@@ -164,7 +193,15 @@ public class ControllerAct {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         m.addAttribute("user",authentication.getName());
         List<User> listUser = userRepository.findAll();
-        m.addAttribute("usersFind", listUser);
+        List<User> listWithoutAdmin = new ArrayList<>();
+
+        for(User usr:listUser){
+            if (usr.getRole().equals("user")){
+                listWithoutAdmin.add(usr);
+            }
+        }
+
+        m.addAttribute("usersFind", listWithoutAdmin);
         m.addAttribute("newActivity", new Activity("", 0f, new Date(02-22-22),
                 new Date(2-22-2022),0f,"","", new User(),0));
         return "activity";
@@ -197,7 +234,15 @@ public class ControllerAct {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         m.addAttribute("user",authentication.getName());
         List<User> listUser = userRepository.findAll();
-        m.addAttribute("usersFind", listUser);
+        List<User> listWithoutAdmin = new ArrayList<>();
+
+        for(User usr:listUser){
+            if (usr.getRole().equals("user")){
+                listWithoutAdmin.add(usr);
+            }
+        }
+
+        m.addAttribute("usersFind", listWithoutAdmin);
 
         List<Activity> activitiesPom = activityRepository.findAll();
         List<Activity> childActivities = new ArrayList<>();
@@ -287,29 +332,128 @@ public class ControllerAct {
         List<String> minutesTo= new ArrayList<>();
 
         for(int i =0; i < pomRegister.size();i++){
-            if(pomRegister.get(i).getUser() == pomUser){
-                finalReg.add(pomRegister.get(i));
-                if(pomRegister.get(i).getTimeFrom().getMinute() < 10){
-                    String minFormatted = String.format("%02d", pomRegister.get(i).getTimeFrom().getMinute());
-                    minutesFrom.add(minFormatted);
-                }else if(pomRegister.get(i).getTimeFrom().getMinute() >= 10){
-                    String minToString = Integer.toString(pomRegister.get(i).getTimeFrom().getMinute());
-                    minutesFrom.add(minToString);
+
+            if (pomUser.getRole().equals("user")){
+                if(pomRegister.get(i).getUser() == pomUser){
+                    finalReg.add(pomRegister.get(i));
+                    if(pomRegister.get(i).getTimeFrom().getMinute() < 10){
+                        String minFormatted = String.format("%02d", pomRegister.get(i).getTimeFrom().getMinute());
+                        minutesFrom.add(minFormatted);
+                    }else if(pomRegister.get(i).getTimeFrom().getMinute() >= 10){
+                        String minToString = Integer.toString(pomRegister.get(i).getTimeFrom().getMinute());
+                        minutesFrom.add(minToString);
+                    }
+                    if(pomRegister.get(i).getTimeTo().getMinute() < 10){
+                        String minFormattedTo = String.format("%02d", pomRegister.get(i).getTimeTo().getMinute());
+                        minutesTo.add(minFormattedTo);
+                    }else if(pomRegister.get(i).getTimeTo().getMinute() >= 10){
+                        String minToString = Integer.toString(pomRegister.get(i).getTimeTo().getMinute());
+                        minutesTo.add(minToString);
+                    }
                 }
-                if(pomRegister.get(i).getTimeTo().getMinute() < 10){
-                    String minFormattedTo = String.format("%02d", pomRegister.get(i).getTimeTo().getMinute());
-                    minutesTo.add(minFormattedTo);
-                }else if(pomRegister.get(i).getTimeTo().getMinute() >= 10){
-                    String minToString = Integer.toString(pomRegister.get(i).getTimeTo().getMinute());
-                    minutesTo.add(minToString);
-                }
+            } else if (pomUser.getRole().equals("admin")) {
+                    finalReg.add(pomRegister.get(i));
+                    if(pomRegister.get(i).getTimeFrom().getMinute() < 10){
+                        String minFormatted = String.format("%02d", pomRegister.get(i).getTimeFrom().getMinute());
+                        minutesFrom.add(minFormatted);
+                    }else if(pomRegister.get(i).getTimeFrom().getMinute() >= 10){
+                        String minToString = Integer.toString(pomRegister.get(i).getTimeFrom().getMinute());
+                        minutesFrom.add(minToString);
+                    }
+                    if(pomRegister.get(i).getTimeTo().getMinute() < 10){
+                        String minFormattedTo = String.format("%02d", pomRegister.get(i).getTimeTo().getMinute());
+                        minutesTo.add(minFormattedTo);
+                    }else if(pomRegister.get(i).getTimeTo().getMinute() >= 10){
+                        String minToString = Integer.toString(pomRegister.get(i).getTimeTo().getMinute());
+                        minutesTo.add(minToString);
+                    }
+
             }
         }
+
+        List<User> listUser = userRepository.findAll();
+        List<User> listWithoutAdmin = new ArrayList<>();
+
+        for(User usr:listUser){
+            if (usr.getRole().equals("user")){
+                listWithoutAdmin.add(usr);
+            }
+        }
+
+        m.addAttribute("usersFind", listWithoutAdmin);
+        m.addAttribute("actTest",new Activity());
         m.addAttribute("minutesTo", minutesTo);
         m.addAttribute("minutesFrom", minutesFrom);
         m.addAttribute("user",authentication.getName());
+        m.addAttribute("userActual",pomUser);
         m.addAttribute("reports",finalReg);
         return "workReports";
+    }
+
+    @PostMapping("workReports")
+    public String showReportsPost(Model m, @ModelAttribute Activity a){
+
+        return "redirect:/workReports/"+a.getUser().getId();
+    }
+
+    @GetMapping("workReports/{id_mother}")
+    public String showReportsUser(Model m, @PathVariable int id_mother){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User pomUserSel = userRepository.findByUsername(authentication.getName());
+
+        User pomUser = userService.findUser(id_mother);
+
+        List<WorkRegister> finalReg = new ArrayList<>();
+
+        List<WorkRegister> pomRegister = workRegisterRepository.findAllReportsDesc();
+        List<Float> pomTime = new ArrayList<>();
+        List<String> minutesFrom= new ArrayList<>();
+        List<String> minutesTo= new ArrayList<>();
+
+        for(int i =0; i < pomRegister.size();i++){
+                if(pomRegister.get(i).getUser() == pomUser){
+                    finalReg.add(pomRegister.get(i));
+                    if(pomRegister.get(i).getTimeFrom().getMinute() < 10){
+                        String minFormatted = String.format("%02d", pomRegister.get(i).getTimeFrom().getMinute());
+                        minutesFrom.add(minFormatted);
+                    }else if(pomRegister.get(i).getTimeFrom().getMinute() >= 10){
+                        String minToString = Integer.toString(pomRegister.get(i).getTimeFrom().getMinute());
+                        minutesFrom.add(minToString);
+                    }
+                    if(pomRegister.get(i).getTimeTo().getMinute() < 10){
+                        String minFormattedTo = String.format("%02d", pomRegister.get(i).getTimeTo().getMinute());
+                        minutesTo.add(minFormattedTo);
+                    }else if(pomRegister.get(i).getTimeTo().getMinute() >= 10){
+                        String minToString = Integer.toString(pomRegister.get(i).getTimeTo().getMinute());
+                        minutesTo.add(minToString);
+                    }
+                }
+
+        }
+        List<User> listUser = userRepository.findAll();
+        List<User> listWithoutAdmin = new ArrayList<>();
+
+        for(User usr:listUser){
+            if (usr.getRole().equals("user")){
+                listWithoutAdmin.add(usr);
+            }
+        }
+
+        m.addAttribute("actTest",new Activity());
+        m.addAttribute("usersFind", listWithoutAdmin);
+        m.addAttribute("minutesTo", minutesTo);
+        m.addAttribute("minutesFrom", minutesFrom);
+        m.addAttribute("user",pomUser.getUsername());
+        m.addAttribute("userActual",pomUserSel);
+        m.addAttribute("reports",finalReg);
+        return "workReports";
+    }
+
+    @PostMapping("workReports//{id_mother}")
+    public String showReportsUserPost(Model m, @ModelAttribute Activity a){
+
+        return "redirect:/workReports/"+a.getUser().getId();
     }
 
     @GetMapping("activity/{id_mother}/createChildActivity")
@@ -318,8 +462,16 @@ public class ControllerAct {
         m.addAttribute("user",authentication.getName());
         List<User> listUser = userRepository.findAll();
         Activity activityPom = activityService.findActivity(id_mother);
+        List<User> listWithoutAdmin = new ArrayList<>();
+
+        for(User usr:listUser){
+            if (usr.getRole().equals("user")){
+                listWithoutAdmin.add(usr);
+            }
+        }
+
         m.addAttribute("actualActivity", activityPom);
-        m.addAttribute("usersFind", listUser);
+        m.addAttribute("usersFind", listWithoutAdmin);
         m.addAttribute("newActivityChild", new Activity(0,"", 0f, new Date(2023-01-11),
                 new Date(2023-01-11),0f,"",0f, "",new User()));
         return "createChildActivity";

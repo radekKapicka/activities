@@ -32,6 +32,11 @@ public class MemUserService implements UserService{
         }
 
     @Override
+    public User findUser(int id) {
+        return userrepo.getOne(id);
+    }
+
+    @Override
     public User updateUser(User user) {
         return userrepo.save(user);
     }
