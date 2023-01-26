@@ -24,6 +24,26 @@
         </div>
       </form>
     </div>
+    <div class="row" th:case="'user'">
+      <div class="col-sm-2">
+        <h2>Filter by time</h2>
+      </div>
+      <div class="col-sm-1">
+        <a class="btn btn-dark filtration" th:href="@{/workReports/time/day}">Day</a>
+      </div>
+      <div class="col-sm-1">
+        <a class="btn btn-dark filtration" th:href="@{/workReports/time/week}">Week</a>
+      </div>
+      <div class="col-sm-1">
+        <a class="btn btn-dark filtration" th:href="@{/workReports/time/month}">Month</a>
+      </div>
+      <div class="col-sm-1">
+        <a class="btn btn-dark filtration" th:href="@{/workReports/time/year}">Year</a>
+      </div>
+      <div class="col-sm-1">
+        <a class="btn btn-dark filtration" th:href="@{/workReports}">All time</a>
+      </div>
+    </div>
   </div>
   <table class="table table-striped">
     <thead>

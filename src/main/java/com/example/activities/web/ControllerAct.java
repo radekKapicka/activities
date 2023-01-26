@@ -450,10 +450,67 @@ public class ControllerAct {
         return "workReports";
     }
 
-    @PostMapping("workReports//{id_mother}")
+    @PostMapping("workReports/{id_mother}")
     public String showReportsUserPost(Model m, @ModelAttribute Activity a){
 
         return "redirect:/workReports/"+a.getUser().getId();
+    }
+
+    @GetMapping("workReports/time/{time_period}")
+    public String showTimeReportsUser(Model m, @PathVariable String time_period){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User pomUserSel = userRepository.findByUsername(authentication.getName());
+
+        User pomUser = userRepository.findByUsername(authentication.getName());
+        List<WorkRegister> pomRegister = new ArrayList<>();
+        List<WorkRegister> pomRegisterFirst = workRegisterRepository.findAllReportsDesc();
+        List<WorkRegister> finalReg = new ArrayList<>();
+
+        for(WorkRegister wrk : pomRegisterFirst){
+            if (time_period.equals("day") && (wrk.getTimeTo().isAfter(LocalDateTime.now().minusDays(1)))){
+                pomRegister.add(wrk);
+            }else if(time_period.equals("week") && (wrk.getTimeTo().isAfter(LocalDateTime.now().minusWeeks(1)))){
+                pomRegister.add(wrk);
+            }else if(time_period.equals("month") && (wrk.getTimeTo().isAfter(LocalDateTime.now().minusMonths(1)))){
+                pomRegister.add(wrk);
+            }else if(time_period.equals("year") && (wrk.getTimeTo().isAfter(LocalDateTime.now().minusYears(1)))){
+                pomRegister.add(wrk);
+            }else if(time_period.equals("alltime")){
+                pomRegister.add(wrk);
+            }
+        }
+
+        List<Float> pomTime = new ArrayList<>();
+        List<String> minutesFrom= new ArrayList<>();
+        List<String> minutesTo= new ArrayList<>();
+
+        for(int i =0; i < pomRegister.size();i++){
+            if(pomRegister.get(i).getUser() == pomUser){
+                finalReg.add(pomRegister.get(i));
+                if(pomRegister.get(i).getTimeFrom().getMinute() < 10){
+                    String minFormatted = String.format("%02d", pomRegister.get(i).getTimeFrom().getMinute());
+                    minutesFrom.add(minFormatted);
+                }else if(pomRegister.get(i).getTimeFrom().getMinute() >= 10){
+                    String minToString = Integer.toString(pomRegister.get(i).getTimeFrom().getMinute());
+                    minutesFrom.add(minToString);
+                }
+                if(pomRegister.get(i).getTimeTo().getMinute() < 10){
+                    String minFormattedTo = String.format("%02d", pomRegister.get(i).getTimeTo().getMinute());
+                    minutesTo.add(minFormattedTo);
+                }else if(pomRegister.get(i).getTimeTo().getMinute() >= 10){
+                    String minToString = Integer.toString(pomRegister.get(i).getTimeTo().getMinute());
+                    minutesTo.add(minToString);
+                }
+            }
+
+        }
+        m.addAttribute("minutesTo", minutesTo);
+        m.addAttribute("minutesFrom", minutesFrom);
+        m.addAttribute("user",pomUser.getUsername());
+        m.addAttribute("userActual",pomUserSel);
+        m.addAttribute("reports",finalReg);
+        return "workReports";
     }
 
     @GetMapping("activity/{id_mother}/createChildActivity")

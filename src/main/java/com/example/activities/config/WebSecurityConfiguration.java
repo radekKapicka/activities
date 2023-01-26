@@ -49,6 +49,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .antMatchers("/workReports").authenticated()
                 .antMatchers("/workReports/**").hasRole("admin")
                 .antMatchers("/workReports/**").authenticated()
+                .antMatchers("/workReports/**").hasRole("user")
+                .antMatchers("/workReports/**").authenticated()
                 .antMatchers("/user-edit").hasRole("user")
                 .antMatchers("/user-edit").authenticated()
                 .antMatchers("/user-board").hasRole("user")
