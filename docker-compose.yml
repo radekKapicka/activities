@@ -13,6 +13,8 @@ services:
       - APP_DB_NAME=activities
   db:
     image: mysql:8.0
+    volumes:
+      - ./sql/backup.sql:/docker-entrypoint-initdb.d/backup.sql
     ports:
       - "3306:3306"
     environment:
