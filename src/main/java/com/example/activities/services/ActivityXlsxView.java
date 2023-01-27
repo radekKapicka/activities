@@ -45,7 +45,16 @@ public class ActivityXlsxView extends AbstractXlsxView {
             }
         }
 
-        int row = 0;
+        Row courseRowHead = sheet.createRow(0);
+        Cell c0 = courseRowHead.createCell(0);
+        c0.setCellValue("Activity ID");
+        courseRowHead.createCell(1).setCellValue("Activity name");
+        courseRowHead.createCell(2).setCellValue("User");
+        courseRowHead.createCell(3).setCellValue("Time from");
+        courseRowHead.createCell(4).setCellValue("Time to");
+        courseRowHead.createCell(5).setCellValue("Time worked in hours");
+
+        int row = 1;
         for (WorkRegister w : registers) {
             Row courseRow = sheet.createRow(row);
             Cell c1 = courseRow.createCell(0);

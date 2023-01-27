@@ -41,4 +41,9 @@ public class MemUserService implements UserService{
         return userrepo.save(user);
     }
 
+    @Override
+    public void deleteUser(User u) {
+        userrepo.delete(u);
+    }
+
 }

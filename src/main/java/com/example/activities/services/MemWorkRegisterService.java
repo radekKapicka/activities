@@ -35,4 +35,9 @@ public class MemWorkRegisterService implements WorkRegisterService{
     public WorkRegister findRegister(int id) {
         return registerrepo.getOne(id);
     }
+
+    @Override
+    public void deleteRegister(WorkRegister w) {
+        registerrepo.delete(w);
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.activities.services;
 
 import com.example.activities.model.Activity;
+import com.example.activities.model.User;
 import com.example.activities.model.WorkRegister;
 
 import java.util.List;
@@ -12,4 +13,6 @@ public interface WorkRegisterService {
     List<WorkRegister> getAll();
 
     WorkRegister findRegister(int id);
+
+    void deleteRegister(WorkRegister w);
 }

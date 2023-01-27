@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout (~{::body},'user-board')}">
+<head>
+  <meta charset="UTF-8">
+  <title>Add activity</title>
+</head>
+<body>
+<div class="row" th:switch="${actualUser.role}">
+  <div class="col-sm-4 register-row" th:case="'admin'">
+    <H1>Delete user</H1>
+    <p>After deleting user, all of his connections will be deleted! That means his comments a work reports.
+    His activities will be asigned to admin. Admin role is to reasign those activities to another users.
+    After submitting you will be redirected to reasign page.</p>
+    </br>
+    <form method="post" th:object="${userDel}">
+      <div class="row">
+        <div class="col-sm-6">
+          <label>User</label></br>
+          <select class="form-select" th:field="*{user}">
+            <option th:each="userNew: ${usersFind}" th:value="${userNew.id}" th:text="${userNew.username}"></option>
+          </select>
+        </div>
+        <div class="form-actions col-sm-4 buttonDel">
+          <button type="submit" class="btn btn-success">Delete user</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

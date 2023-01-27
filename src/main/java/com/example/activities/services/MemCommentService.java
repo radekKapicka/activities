@@ -37,4 +37,9 @@ public class MemCommentService implements CommentService{
         return commentrepo.getOne(id);
     }
 
+    @Override
+    public void deleteComment(Comment c) {
+        commentrepo.delete(c);
+    }
+
 }

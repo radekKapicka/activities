@@ -19,6 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.persistence.Entity;
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 import java.sql.Date;
@@ -63,10 +64,13 @@ public class ControllerAct {
         this.workRegisterService = workRegisterService;
     }
 
+    /* Redirect to home page user board */
     @RequestMapping("/")
     public String index() {
         return "redirect:/user-board";
     }
+
+    /* get mapping for registration */
 
     @GetMapping("registration")
     //@ResponseBody
@@ -75,6 +79,7 @@ public class ControllerAct {
         return "login-screen";
     }
 
+    /* Post mapping for registration */
     @PostMapping("registration")
     public String registrationPost(Model m, @Valid @ModelAttribute User u, BindingResult bindingResult, RedirectAttributes redirectAttributes){
 
@@ -111,11 +116,14 @@ public class ControllerAct {
         return "redirect:/registration";
     }
 
+    /* Get mapping for login */
 
     @GetMapping("login")
         public String login(){
             return "login";
     }
+
+    /* Get mapping for user board */
 
     @GetMapping("user-board")
     public String board(Model m){
@@ -188,6 +196,8 @@ public class ControllerAct {
         return "user-board";
     }
 
+    /* Get mapping for activity */
+
     @GetMapping("activity")
     public String activity(Model m){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -207,6 +217,7 @@ public class ControllerAct {
         return "activity";
     }
 
+    /* post mapping for activity */
     @PostMapping("activity")
     public String activityPost(Model m,  @ModelAttribute Activity a){
 
@@ -216,6 +227,7 @@ public class ControllerAct {
         return "redirect:/user-board";
     }
 
+    /* Get mapping for detail activity */
     @GetMapping("activity/{id}")
     public String updateAct(@PathVariable int id, Model m){
         Activity findActivity = activityService.findActivity(id);
@@ -278,6 +290,7 @@ public class ControllerAct {
         return "activity-edit";
     }
 
+    /* Post mapping for detail activity */
     @PostMapping("activity/{id}")
     public String updateActPost(@PathVariable int id, Model m, @ModelAttribute Activity a){
         Activity findActivity = activityService.findActivity(id);
@@ -286,6 +299,7 @@ public class ControllerAct {
         return "redirect:/user-board";
     }
 
+    /* Get mapping for adding report to activity */
     @GetMapping("activity/{id}/addReport")
     public String addReport(@PathVariable int id, Model m){
 
@@ -298,6 +312,7 @@ public class ControllerAct {
         return "addReport";
     }
 
+    /* Post mapping for adding report to activity */
     @PostMapping("activity/{id}/addReport")
     public String addReportPost(@PathVariable int id, Model m, @ModelAttribute WorkRegister w){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -319,6 +334,7 @@ public class ControllerAct {
         return "redirect:/activity/{id}";
     }
 
+    /* Get mapping work reports */
     @GetMapping("workReports")
     public String showReports(Model m){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -390,12 +406,14 @@ public class ControllerAct {
         return "workReports";
     }
 
+    /* Post mapping for work reports */
     @PostMapping("workReports")
     public String showReportsPost(Model m, @ModelAttribute Activity a){
 
         return "redirect:/workReports/"+a.getUser().getId();
     }
 
+    /* Get mapping for filtering reports by user */
     @GetMapping("workReports/{id_mother}")
     public String showReportsUser(Model m, @PathVariable int id_mother){
 
@@ -450,12 +468,14 @@ public class ControllerAct {
         return "workReports";
     }
 
+    /* post mapping for reports by user */
     @PostMapping("workReports/{id_mother}")
     public String showReportsUserPost(Model m, @ModelAttribute Activity a){
 
         return "redirect:/workReports/"+a.getUser().getId();
     }
 
+    /* Get mapping for filtering reports by time period */
     @GetMapping("workReports/time/{time_period}")
     public String showTimeReportsUser(Model m, @PathVariable String time_period){
 
@@ -513,6 +533,7 @@ public class ControllerAct {
         return "workReports";
     }
 
+    /* Get mapping for creating child activity */
     @GetMapping("activity/{id_mother}/createChildActivity")
     public String childActivity(Model m, @PathVariable int id_mother){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -534,11 +555,10 @@ public class ControllerAct {
         return "createChildActivity";
     }
 
+    /* Post mapping for creating child activity */
     @PostMapping("activity/{id_mother}/createChildActivity")
     public String childActivityPost(Model m, @PathVariable int id_mother,  @ModelAttribute Activity a){
         Activity activityPom = activityService.findActivity(id_mother);
-        System.out.println(a.getId());
-        System.out.println(activityPom.getId());
         a.setMotherActivity(activityPom);
         activityPom.getChildActivities().add(a);
 
@@ -547,6 +567,7 @@ public class ControllerAct {
         return "redirect:/user-board";
     }
 
+    /* Get mapping for adding comment to activity */
     @GetMapping("activity/{id_mother}/addComment")
     public String addComment(Model m, @PathVariable int id_mother){
 
@@ -556,6 +577,7 @@ public class ControllerAct {
         return "addComent";
     }
 
+    /* Post mapping for adding comment to activity */
     @PostMapping("activity/{id_mother}/addComment")
     public String addCommentPost(Model m, @PathVariable int id_mother,  @ModelAttribute Comment c){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -569,6 +591,7 @@ public class ControllerAct {
         return "redirect:/activity/{id_mother}";
     }
 
+    /* Get mapping for creating xlsx file */
     @GetMapping({ "activity/{id_mother}/document.xlsx" })
     public ActivityXlsxView createXlsxActivityList(Model m, @PathVariable int id_mother) {
         // Here we are returning an object of type 'Vets' rather than a collection of Vet
@@ -580,14 +603,20 @@ public class ControllerAct {
         return new ActivityXlsxView(activityPom,workRegisters);
     }
 
+    /* Get mapping for editing user */
+
     @GetMapping("user-edit")
     public String editUser(Model m){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User pomUser = userRepository.findByUsername(authentication.getName());
         m.addAttribute("user",authentication.getName());
 
+        m.addAttribute("actualUser", pomUser);
         m.addAttribute("userEdit",new User());
         return "userEdit";
     }
+
+    /* Post mapping for editing user */
 
     @PostMapping("user-edit")
     public String editUserPost(Model m,  @ModelAttribute User u, RedirectAttributes redirectAttributes){
@@ -612,8 +641,6 @@ public class ControllerAct {
             u.setRole("user");
             System.out.println(u.getId());
             userService.updateUser(u);
-            redirectAttributes.addFlashAttribute("messageRegSucc", "Registration completed succesfull! You may log in!");
-            redirectAttributes.addFlashAttribute("messageRegSuccNotVisible", "notVis");
             return "redirect:/user-board";
         }else if(!u.getPassword().equals(u.getRole())){
             redirectAttributes.addFlashAttribute("messagePass", "Passwords not matching");
@@ -624,6 +651,111 @@ public class ControllerAct {
         return "redirect:/user-edit";
     }
 
+    /* Get mapping for admin managinf users */
+
+    @GetMapping("manage-users")
+    public String deleteUsers(Model m){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        m.addAttribute("user",authentication.getName());
+        User userPom = userRepository.findByUsername(authentication.getName());
+        List<User> listUser = userRepository.findAll();
+        List<User> listWithoutAdmin = new ArrayList<>();
+
+        for(User usr:listUser){
+            if (usr.getRole().equals("user")){
+                listWithoutAdmin.add(usr);
+            }
+        }
+        m.addAttribute("userDel", new Activity("", 0f, new Date(02-22-22),
+                new Date(2-22-2022),0f,"","", new User(),0));
+        m.addAttribute("actualUser", userPom);
+        m.addAttribute("usersFind", listWithoutAdmin);
+        return "manageUsers";
+    }
+
+    /* Post mapping for admin managinf users */
+
+    @PostMapping("manage-users")
+    public String deleteUsersPost(Model m, @ModelAttribute Activity a){
+        List<Activity> actPom = activityRepository.findAll();
+        List<WorkRegister> workPom = workRegisterRepository.findAll();
+        List<Comment> commentsPom = commentRepository.findAll();
+        User pomUser = userRepository.findByUsername("admin");
+        User actUser = userRepository.findByUsername(a.getUser().getUsername());
+
+        for(Activity act : actPom){
+            if(actUser == act.getUser()){
+                act.setUser(pomUser);
+                activityService.updateActivity(act);
+            }
+        }
+        for (WorkRegister wrk : workPom){
+            if(actUser == wrk.getUser()){
+                workRegisterService.deleteRegister(wrk);
+            }
+        }
+        for (Comment cmt : commentsPom){
+            if(actUser == cmt.getUser()){
+                commentService.deleteComment(cmt);
+            }
+        }
+
+        userService.deleteUser(actUser);
+        return "redirect:/activity-reasign";
+    }
+
+    /* get mapping for activity reassign */
+    @GetMapping("activity-reasign")
+    public String activityReasign(Model m){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        m.addAttribute("user",authentication.getName());
+
+        User pomUser = userRepository.findByUsername("admin");
+        User userPom = userRepository.findByUsername(authentication.getName());
+
+        m.addAttribute("userActual",pomUser);
+
+        List<Activity> activitiesAll = activityRepository.findAllActivitiesDesc();
+        List<Activity> activitiesNew = new ArrayList<>();
+        List<Activity> activitiesToBeImp = new ArrayList<>();
+        List<Activity> activitiesDoing = new ArrayList<>();
+        List<Activity> activitiesDone = new ArrayList<>();
+        List<Float> timePercNew = new ArrayList<>();
+
+            for (int i = 0; i< activitiesAll.size();i++){
+                if(activitiesAll.get(i).getUser().getId() == pomUser.getId() && activitiesAll.get(i).getState().equals("new")){
+                    if(activitiesAll.get(i).getTime() < activitiesAll.get(i).getTimeWorked()){
+                        timePercNew.add(
+                                activitiesAll.get(i).getTimeWorked() /
+                                        (activitiesAll.get(i).getTime() / 100));
+                    }else{
+                        timePercNew.add(activitiesAll.get(i).getTime());
+                    }
+                    activitiesNew.add(activitiesAll.get(i));
+                }else if(activitiesAll.get(i).getUser().getId() == pomUser.getId() && activitiesAll.get(i).getState().equals("toBeImp")){
+                    activitiesToBeImp.add(activitiesAll.get(i));
+                }else if(activitiesAll.get(i).getUser().getId() == pomUser.getId() && activitiesAll.get(i).getState().equals("doing")) {
+                    activitiesDoing.add(activitiesAll.get(i));
+                }else if(activitiesAll.get(i).getUser().getId() == pomUser.getId() && activitiesAll.get(i).getState().equals("done")) {
+                    activitiesDone.add(activitiesAll.get(i));
+                }
+            }
+
+        m.addAttribute("actualUser", userPom);
+        m.addAttribute("timePercNew",timePercNew);
+        m.addAttribute("activitiesNew",activitiesNew);
+        m.addAttribute("activitiesToBeImp",activitiesToBeImp);
+        m.addAttribute("activitiesDoing",activitiesDoing);
+        m.addAttribute("activitiesDone",activitiesDone);
+        m.addAttribute("activitiesDone",activitiesDone);
+        m.addAttribute("numOfActivitiesNew",activitiesNew.size());
+        m.addAttribute("numOfActivitiesTBI",activitiesToBeImp.size());
+        m.addAttribute("numOfActivitiesWO",activitiesDoing.size());
+        m.addAttribute("numOfActivitiesDone",activitiesDone.size());
+        return "activityReasign";
+    }
+
+    /* passwd validation */
     public static boolean isPassValid(String password)
     {
         if(password.matches("(?!.*[^A-Za-z0-9])(?=.{6,}).*\\d.*\\d.*")) {

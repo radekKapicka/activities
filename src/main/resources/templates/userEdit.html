@@ -27,6 +27,17 @@
         </div>
       </div>
     </form>
+    <div th:switch="${actualUser.role}">
+        <div th:case="'admin'" class="row adminMenu">
+          <h2>Admin menu:</h2>
+          <div class="col-sm-4">
+            <a class="btn btn-dark" th:href="@{/manage-users}">Manage users</a>
+          </div>
+          <div class="col-sm-8">
+            <a class="btn btn-dark" th:href="@{/activity-reasign}">Activities to be assigned</a>
+          </div>
+        </div>
+    </div>
   </div>
 </div>
 <script>
